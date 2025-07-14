@@ -5,15 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReCoSys.ECommerce.Api", "src\ReCoSys.ECommerce.Api\ReCoSys.ECommerce.Api.csproj", "{4D84E83C-E4C1-41B6-80D5-03DC800CF492}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recosys.Backend.Api", "src\ReCoSys.ECommerce.Api\Recosys.Backend.Api.csproj", "{4D84E83C-E4C1-41B6-80D5-03DC800CF492}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReCoSys.ECommerce.Application", "src\ReCoSys.ECommerce.Application\ReCoSys.ECommerce.Application.csproj", "{739D122E-5D83-4466-8C96-CD3B887B48D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recosys.Backend.Application", "src\ReCoSys.ECommerce.Application\Recosys.Backend.Application.csproj", "{739D122E-5D83-4466-8C96-CD3B887B48D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReCoSys.ECommerce.Domain", "src\ReCoSys.ECommerce.Domain\ReCoSys.ECommerce.Domain.csproj", "{E984FFAF-A0DE-41A2-A16A-F9459AE6C92E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recosys.Backend.Domain", "src\ReCoSys.ECommerce.Domain\Recosys.Backend.Domain.csproj", "{E984FFAF-A0DE-41A2-A16A-F9459AE6C92E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReCoSys.ECommerce.Infrastructure", "src\ReCoSys.ECommerce.Infrastructure\ReCoSys.ECommerce.Infrastructure.csproj", "{DF49ED9C-3504-4372-9E77-45E201E74B81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recosys.Backend.Infrastructure", "src\ReCoSys.ECommerce.Infrastructure\Recosys.Backend.Infrastructure.csproj", "{DF49ED9C-3504-4372-9E77-45E201E74B81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReCoSys.ECommerce.Shared", "src\ReCoSys.ECommerce.Shared\ReCoSys.ECommerce.Shared.csproj", "{97EA9BE7-664A-467A-8176-D5B28769F6E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recosys.Backend.Shared", "src\ReCoSys.ECommerce.Shared\Recosys.Backend.Shared.csproj", "{97EA9BE7-664A-467A-8176-D5B28769F6E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,5 +95,8 @@ Global
 		{E984FFAF-A0DE-41A2-A16A-F9459AE6C92E} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{DF49ED9C-3504-4372-9E77-45E201E74B81} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{97EA9BE7-664A-467A-8176-D5B28769F6E5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83DABD1D-D15F-4348-BE60-13C3F1FDC95D}
 	EndGlobalSection
 EndGlobal

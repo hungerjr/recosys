@@ -3,10 +3,10 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReCoSys.ECommerce.Application\ReCoSys.ECommerce.Application.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Infrastructure\ReCoSys.ECommerce.Infrastructure.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Domain\ReCoSys.ECommerce.Domain.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Shared\ReCoSys.ECommerce.Shared.csproj" />
+    <ProjectReference Include="..\ReCoSys.ECommerce.Application\Recosys.Backend.Application.csproj" />
+    <ProjectReference Include="..\ReCoSys.ECommerce.Infrastructure\Recosys.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\ReCoSys.ECommerce.Domain\Recosys.Backend.Domain.csproj" />
+    <ProjectReference Include="..\ReCoSys.ECommerce.Shared\Recosys.Backend.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
