@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using ReCoSys.ECommerce.Api.Extensions;
+using Recosys.Backend.Api.Extensions;
 using Serilog;
 using System;
 using System.Text;
@@ -24,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "ReCoSys.ECommerce.Api", Version = "v1" });
+    c.SwaggerDoc("v1", new() { Title = "Recosys.Backend.Api", Version = "v1" });
 
     // Add JWT Bearer definition
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme

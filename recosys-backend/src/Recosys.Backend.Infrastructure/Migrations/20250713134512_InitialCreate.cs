@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace ReCoSys.ECommerce.Infrastructure.Migrations
+namespace Recosys.Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

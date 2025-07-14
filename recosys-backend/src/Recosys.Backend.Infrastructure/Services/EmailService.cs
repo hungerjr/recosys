@@ -1,10 +1,10 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using ReCoSys.ECommerce.Application.Interfaces;
+using Recosys.Backend.Application.Interfaces;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Infrastructure.Services
+namespace Recosys.Backend.Infrastructure.Services
 {
     public class EmailService(IConfiguration config) : IEmailService
     {

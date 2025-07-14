@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ReCoSys.ECommerce.Api.Extensions
+namespace Recosys.Backend.Api.Extensions
 {
     public static class ApplicationServiceCollectionExtensions
     {

@@ -1,8 +1,8 @@
-﻿using ReCoSys.ECommerce.Domain.Entities;
+﻿using Recosys.Backend.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Application.Interfaces
+namespace Recosys.Backend.Application.Interfaces
 {
     public interface IProductRepository
     {

@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ReCoSys.ECommerce.Application.Interfaces;
-using ReCoSys.ECommerce.Application.Services;
-using ReCoSys.ECommerce.Infrastructure.Persistence;
-using ReCoSys.ECommerce.Infrastructure.Repositories;
-using ReCoSys.ECommerce.Infrastructure.Services;
+using Recosys.Backend.Application.Interfaces;
+using Recosys.Backend.Application.Services;
+using Recosys.Backend.Infrastructure.Persistence;
+using Recosys.Backend.Infrastructure.Repositories;
+using Recosys.Backend.Infrastructure.Services;
 
-namespace ReCoSys.ECommerce.Api.Extensions
+namespace Recosys.Backend.Api.Extensions
 {
     public static class InfrastructureServiceCollectionExtensions
     {

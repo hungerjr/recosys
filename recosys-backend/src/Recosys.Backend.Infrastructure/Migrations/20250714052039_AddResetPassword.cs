@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ReCoSys.ECommerce.Infrastructure.Migrations
+namespace Recosys.Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddResetPassword : Migration

@@ -3,12 +3,6 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReCoSys.ECommerce.Application\Recosys.Backend.Application.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Infrastructure\Recosys.Backend.Infrastructure.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Domain\Recosys.Backend.Domain.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Shared\Recosys.Backend.Shared.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
@@ -22,5 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Middlewares\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recosys.Backend.Application\Recosys.Backend.Application.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Domain\Recosys.Backend.Domain.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Infrastructure\Recosys.Backend.Infrastructure.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Shared\Recosys.Backend.Shared.csproj" />
   </ItemGroup>
 </Project>

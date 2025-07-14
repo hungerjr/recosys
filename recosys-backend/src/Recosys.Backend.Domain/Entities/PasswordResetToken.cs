@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Domain.Entities
+namespace Recosys.Backend.Domain.Entities
 {
     public class PasswordResetToken
     {

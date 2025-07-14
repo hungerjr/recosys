@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ReCoSys.ECommerce.Infrastructure.Persistence;
+using Recosys.Backend.Infrastructure.Persistence;
+
 
 #nullable disable
 
-namespace ReCoSys.ECommerce.Infrastructure.Migrations
+namespace Recosys.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +23,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.PasswordResetToken", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.PasswordResetToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +50,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                     b.ToTable("PasswordResetTokens");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.ProductDetails", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.ProductDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +81,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,7 +147,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -174,9 +175,9 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.PasswordResetToken", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.PasswordResetToken", b =>
                 {
-                    b.HasOne("ReCoSys.ECommerce.Domain.Entities.UserInfo", "User")
+                    b.HasOne("Recosys.Backend.Domain.Entities.UserInfo", "User")
                         .WithMany("PasswordResetTokens")
                         .HasForeignKey("UserInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -185,9 +186,9 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
-                    b.HasOne("ReCoSys.ECommerce.Domain.Entities.UserRole", "UserRole")
+                    b.HasOne("Recosys.Backend.Domain.Entities.UserRole", "UserRole")
                         .WithMany("Users")
                         .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -196,12 +197,12 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                     b.Navigation("UserRole");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
                     b.Navigation("PasswordResetTokens");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserRole", b =>
                 {
                     b.Navigation("Users");
                 });

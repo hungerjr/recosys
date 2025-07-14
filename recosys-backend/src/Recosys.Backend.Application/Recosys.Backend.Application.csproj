@@ -3,8 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReCoSys.ECommerce.Domain\Recosys.Backend.Domain.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Shared\Recosys.Backend.Shared.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Domain\Recosys.Backend.Domain.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Shared\Recosys.Backend.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />

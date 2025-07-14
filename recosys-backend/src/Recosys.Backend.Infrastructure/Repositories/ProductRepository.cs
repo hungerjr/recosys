@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReCoSys.ECommerce.Application.Interfaces;
-using ReCoSys.ECommerce.Domain.Entities;
-using ReCoSys.ECommerce.Infrastructure.Persistence;
+using Recosys.Backend.Infrastructure.Persistence;
+using Recosys.Backend.Application.Interfaces;
+using Recosys.Backend.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Infrastructure.Repositories
+namespace Recosys.Backend.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
@@ -32,7 +32,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Repositories
 
         public async Task<bool> SaveChangesAsync()
         {
-            return (await _context.SaveChangesAsync()) > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

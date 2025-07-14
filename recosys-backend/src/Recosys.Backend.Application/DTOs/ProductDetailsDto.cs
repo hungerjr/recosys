@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ReCoSys.ECommerce.Application.DTOs
+namespace Recosys.Backend.Application.DTOs
 {
     public class ProductDetailsDto
     {

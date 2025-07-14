@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ReCoSys.ECommerce.Api": {
+    "Recosys.Backend.Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

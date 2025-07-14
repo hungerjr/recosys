@@ -1,9 +1,9 @@
-﻿using ReCoSys.ECommerce.Application.Interfaces;
-using ReCoSys.ECommerce.Domain.Entities;
+﻿using Recosys.Backend.Application.Interfaces;
+using Recosys.Backend.Domain.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Application.Services
+namespace Recosys.Backend.Application.Services
 {
     public class PasswordResetService
     {

@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using ReCoSys.ECommerce.Application.DTOs;
-using ReCoSys.ECommerce.Application.Interfaces;
-using ReCoSys.ECommerce.Application.Services;
-using ReCoSys.ECommerce.Domain.Entities;
-using ReCoSys.ECommerce.Infrastructure.Persistence;
+using Recosys.Backend.Application.DTOs;
+using Recosys.Backend.Application.Interfaces;
+using Recosys.Backend.Application.Services;
+using Recosys.Backend.Domain.Entities;
+using Recosys.Backend.Infrastructure.Persistence;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Api.Controllers
+namespace Recosys.Backend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

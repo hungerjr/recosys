@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ReCoSys.ECommerce.Domain.Entities
+namespace Recosys.Backend.Domain.Entities
 {
     public class ProductDetails
     {

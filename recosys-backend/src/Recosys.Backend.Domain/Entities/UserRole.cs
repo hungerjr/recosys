@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ReCoSys.ECommerce.Domain.Entities
+namespace Recosys.Backend.Domain.Entities
 {
     public class UserRole
     {

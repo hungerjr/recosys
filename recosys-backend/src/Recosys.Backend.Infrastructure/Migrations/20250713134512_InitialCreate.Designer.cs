@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ReCoSys.ECommerce.Infrastructure.Persistence;
+using Recosys.Backend.Infrastructure.Persistence;
+
 
 #nullable disable
 
-namespace ReCoSys.ECommerce.Infrastructure.Migrations
+namespace Recosys.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250713134512_InitialCreate")]
@@ -25,7 +26,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.ProductDetails", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.ProductDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +57,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -118,7 +119,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,9 +147,9 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
-                    b.HasOne("ReCoSys.ECommerce.Domain.Entities.UserRole", "UserRole")
+                    b.HasOne("Recosys.Backend.Domain.Entities.UserRole", "UserRole")
                         .WithMany("Users")
                         .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -157,7 +158,7 @@ namespace ReCoSys.ECommerce.Infrastructure.Migrations
                     b.Navigation("UserRole");
                 });
 
-            modelBuilder.Entity("ReCoSys.ECommerce.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserRole", b =>
                 {
                     b.Navigation("Users");
                 });

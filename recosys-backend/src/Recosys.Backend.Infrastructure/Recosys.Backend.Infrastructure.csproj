@@ -3,9 +3,9 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReCoSys.ECommerce.Application\ReCoSys.ECommerce.Application.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Domain\ReCoSys.ECommerce.Domain.csproj" />
-    <ProjectReference Include="..\ReCoSys.ECommerce.Shared\ReCoSys.ECommerce.Shared.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Application\Recosys.Backend.Application.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Domain\Recosys.Backend.Domain.csproj" />
+    <ProjectReference Include="..\Recosys.Backend.Shared\Recosys.Backend.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

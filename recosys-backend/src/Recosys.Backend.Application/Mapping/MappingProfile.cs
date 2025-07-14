@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using ReCoSys.ECommerce.Domain.Entities;
-using ReCoSys.ECommerce.Application.DTOs;
+using Recosys.Backend.Domain.Entities;
+using Recosys.Backend.Application.DTOs;
 
-namespace ReCoSys.ECommerce.Application.Mapping
+namespace Recosys.Backend.Application.Mapping
 {
     public class MappingProfile : Profile
     {

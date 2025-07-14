@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Application.Interfaces
+namespace Recosys.Backend.Application.Interfaces
 {
     public interface IEmailService
     {

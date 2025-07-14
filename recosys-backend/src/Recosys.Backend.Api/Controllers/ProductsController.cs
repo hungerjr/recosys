@@ -1,12 +1,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReCoSys.ECommerce.Application.DTOs;
-using ReCoSys.ECommerce.Application.Interfaces;
+using Recosys.Backend.Application.DTOs;
+using Recosys.Backend.Application.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Api.Controllers
+namespace Recosys.Backend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

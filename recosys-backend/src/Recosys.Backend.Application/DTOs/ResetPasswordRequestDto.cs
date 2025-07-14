@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReCoSys.ECommerce.Application.DTOs
+namespace Recosys.Backend.Application.DTOs
 {
     public class ResetPasswordRequestDto
     {

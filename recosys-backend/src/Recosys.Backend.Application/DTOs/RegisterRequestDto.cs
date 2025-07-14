@@ -1,4 +1,4 @@
-﻿namespace ReCoSys.ECommerce.Application.DTOs
+﻿namespace Recosys.Backend.Application.DTOs
 {
     public class RegisterRequestDto
     {

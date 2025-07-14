@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReCoSys.ECommerce.Domain.Entities;
+using Recosys.Backend.Domain.Entities;
 using System;
 
-namespace ReCoSys.ECommerce.Infrastructure.Persistence
+namespace Recosys.Backend.Infrastructure.Persistence
 {
     public class AppDbContext : DbContext
     {
