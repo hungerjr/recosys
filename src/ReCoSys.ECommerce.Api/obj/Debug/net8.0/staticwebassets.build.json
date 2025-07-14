@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "m+3QQhkbhp5L3ZbejwFD16HH8mcbMsKHgHlnE9hUgu0=",
+  "Source": "ReCoSys.ECommerce.Api",
+  "BasePath": "_content/ReCoSys.ECommerce.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
