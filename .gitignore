@@ -32,6 +32,14 @@ out/
 .env.*   # in case of other env variants
 
 # ---------------------
+# bin, obj, and .vs folder
+# ---------------------
+bin/
+obj/
+.vs/
+*.zip
+
+# ---------------------
 # Local SSL Certificates
 # ---------------------
 localhost.pem
