@@ -77,9 +77,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNgrok", policy =>
     {
-        policy.WithOrigins("https://8f440751e4a6.ngrok-free.app") 
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+                "https://localhost:3000",
+                "https://7732cce4fbd6.ngrok-free.app"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -99,9 +103,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowNgrok");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowNgrok");
 app.MapControllers();
 app.Run();

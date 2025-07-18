@@ -38,7 +38,6 @@ namespace Recosys.Backend.Infrastructure.Persistence
                 new UserInfo
                 {
                     Id = 1,
-                    Username = "admin",
                     PasswordHash = "Admin@123",
                     Name = "Admin User",
                     CreatedAt = new DateTime(2024, 01, 01, 0, 0, 0, DateTimeKind.Utc),

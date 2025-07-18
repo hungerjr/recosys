@@ -14,12 +14,6 @@ namespace Recosys.Backend.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<UserInfo> GetByUsernameAsync(string username)
-        {
-            return await _context.UserInfo.Include(u => u.UserRole)
-                .FirstOrDefaultAsync(u => u.Username == username);
-        }
-
         public async Task<UserInfo> GetByIdAsync(int id)
         {
             return await _context.UserInfo.FindAsync(id);

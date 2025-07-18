@@ -6,7 +6,6 @@ namespace Recosys.Backend.Domain.Entities
     public class UserInfo
     {
         public int Id { get; set; }
-        public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string Name { get; set; }
         public DateTime? DateOfBirth { get; set; }

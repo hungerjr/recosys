@@ -34,7 +34,7 @@ namespace Recosys.Backend.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var user = await _userRepository.GetByUsernameAsync(request.Username);
+            var user = await _userRepository.GetByEmailAsync(request.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
                 return Unauthorized("Invalid username or password.");
@@ -50,7 +50,7 @@ namespace Recosys.Backend.Api.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             // Check if username already exists
-            var existingUser = await _userRepository.GetByUsernameAsync(request.Username);
+            var existingUser = await _userRepository.GetByEmailAsync(request.Email);
             if (existingUser != null)
                 return BadRequest("Username already exists.");
 
@@ -59,7 +59,6 @@ namespace Recosys.Backend.Api.Controllers
 
             var user = new UserInfo
             {
-                Username = request.Username,
                 PasswordHash = hashedPassword,
                 Name = request.Name,
                 Email = request.Email,
@@ -102,7 +101,7 @@ namespace Recosys.Backend.Api.Controllers
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.UserRole?.Name ?? "User")
             };
 
