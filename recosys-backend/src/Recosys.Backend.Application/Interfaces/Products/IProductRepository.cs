@@ -1,8 +1,8 @@
-﻿using Recosys.Backend.Domain.Entities;
+﻿using Recosys.Backend.Domain.Entities.Products;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Recosys.Backend.Application.Interfaces
+namespace Recosys.Backend.Application.Interfaces.Products
 {
     public interface IProductRepository
     {

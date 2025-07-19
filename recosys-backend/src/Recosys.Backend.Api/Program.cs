@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Recosys.Backend.Api.Extensions;
+using Recosys.Backend.Application.Mapping;
 using Serilog;
 using System;
 using System.Text;
@@ -48,7 +49,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });
@@ -88,7 +89,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAuthorization();
-
+builder.Services.AddAutoMapper(typeof(CustomerProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

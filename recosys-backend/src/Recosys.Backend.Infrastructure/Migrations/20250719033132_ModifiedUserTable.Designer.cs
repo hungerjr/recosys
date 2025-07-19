@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recosys.Backend.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Recosys.Backend.Infrastructure.Persistence;
 namespace Recosys.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250719033132_ModifiedUserTable")]
+    partial class ModifiedUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Recosys.Backend.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.Customer.CustomerDetails", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.PasswordResetToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,30 +33,26 @@ namespace Recosys.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("UserInfoId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.HasIndex("UserInfoId");
+
+                    b.ToTable("PasswordResetTokens");
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.Products.ProductDetails", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.ProductDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,34 +83,7 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.PasswordResetToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserInfoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserInfoId");
-
-                    b.ToTable("PasswordResetTokens");
-                });
-
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,7 +145,7 @@ namespace Recosys.Backend.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.UserRole", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -201,9 +173,9 @@ namespace Recosys.Backend.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.PasswordResetToken", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.PasswordResetToken", b =>
                 {
-                    b.HasOne("Recosys.Backend.Domain.Entities.User.UserInfo", "User")
+                    b.HasOne("Recosys.Backend.Domain.Entities.UserInfo", "User")
                         .WithMany("PasswordResetTokens")
                         .HasForeignKey("UserInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -212,9 +184,9 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
-                    b.HasOne("Recosys.Backend.Domain.Entities.User.UserRole", "UserRole")
+                    b.HasOne("Recosys.Backend.Domain.Entities.UserRole", "UserRole")
                         .WithMany("Users")
                         .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -223,12 +195,12 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.Navigation("UserRole");
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.UserInfo", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserInfo", b =>
                 {
                     b.Navigation("PasswordResetTokens");
                 });
 
-            modelBuilder.Entity("Recosys.Backend.Domain.Entities.User.UserRole", b =>
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.UserRole", b =>
                 {
                     b.Navigation("Users");
                 });

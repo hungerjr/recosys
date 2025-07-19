@@ -1,19 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recosys.Backend.Infrastructure.Persistence;
-using Recosys.Backend.Application.Interfaces;
-using Recosys.Backend.Domain.Entities;
 using System;
 using System.Threading.Tasks;
+using Recosys.Backend.Domain.Entities.User;
+using Recosys.Backend.Application.Interfaces.User;
 
-namespace Recosys.Backend.Infrastructure.Repositories
+namespace Recosys.Backend.Infrastructure.Repositories.User
 {
-    public class PasswordResetRepository : IPasswordResetRepository
+    public class PasswordResetRepository(AppDbContext context) : IPasswordResetRepository
     {
-        private readonly AppDbContext _context;
-        public PasswordResetRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public async Task CreateTokenAsync(PasswordResetToken token)
         {

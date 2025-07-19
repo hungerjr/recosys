@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using Recosys.Backend.Domain.Entities;
-using Recosys.Backend.Application.DTOs;
+using Recosys.Backend.Application.DTOs.Customer;
+using Recosys.Backend.Application.DTOs.Products;
+using Recosys.Backend.Domain.Entities.Customer;
+using Recosys.Backend.Domain.Entities.Products;
 
 namespace Recosys.Backend.Application.Mapping
 {
@@ -8,6 +10,7 @@ namespace Recosys.Backend.Application.Mapping
     {
         public MappingProfile()
         {
+            // Products Mapping
             CreateMap<ProductDetails, ProductDetailsDto>().ReverseMap();
         }
     }

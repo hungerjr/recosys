@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Recosys.Backend.Domain.Entities;
+using Recosys.Backend.Domain.Entities.Customer;
+using Recosys.Backend.Domain.Entities.Products;
+using Recosys.Backend.Domain.Entities.User;
 using System;
 
 namespace Recosys.Backend.Infrastructure.Persistence
@@ -15,6 +17,7 @@ namespace Recosys.Backend.Infrastructure.Persistence
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<ProductDetails> Products { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+        public DbSet<CustomerDetails> Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Recosys.Backend.Application.DTOs
+namespace Recosys.Backend.Domain.Entities.Products
 {
-    public class ProductDetailsDto
+    public class ProductDetails
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
         public string Description { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

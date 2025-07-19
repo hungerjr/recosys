@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Recosys.Backend.Domain.Entities
+namespace Recosys.Backend.Domain.Entities.User
 {
     public class UserInfo
     {

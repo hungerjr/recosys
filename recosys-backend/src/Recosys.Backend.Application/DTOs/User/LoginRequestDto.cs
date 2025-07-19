@@ -1,4 +1,4 @@
-﻿namespace Recosys.Backend.Application.DTOs
+﻿namespace Recosys.Backend.Application.DTOs.User
 {
     public class LoginRequestDto
     {
