@@ -13,40 +13,54 @@ namespace Recosys.Backend.Api.Controllers.Customer
     [Route("api/customers")]
     public class CustomerController(ICustomerRepository repository, IMapper mapper) : ControllerBase
     {
-        [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<CustomerDetailsDto>>> GetAllCustomers()
+        [HttpGet("get-all")]
+        public async Task<ActionResult<IEnumerable<CustomerDetailsDto>>> GetAll()
         {
             var customers = await repository.GetAllAsync();
-            var dtoList = mapper.Map<IEnumerable<CustomerDetailsDto>>(customers);
-            return Ok(dtoList);
+            return Ok(mapper.Map<IEnumerable<CustomerDetailsDto>>(customers));
         }
 
-        [HttpPost("get-by-id")]
-        public async Task<ActionResult<CustomerDetailsDto>> GetById([FromBody] IdRequest request)
+        [HttpGet("details/{customerId}")]
+        public async Task<ActionResult<CustomerDetailsDto>> GetById(int customerId)
         {
-            var customer = await repository.GetByIdAsync(request.Id);
+            var customer = await repository.GetByIdAsync(customerId);
             if (customer == null) return NotFound();
-
             return Ok(mapper.Map<CustomerDetailsDto>(customer));
         }
 
-
-        [HttpPost("create")]
-        public async Task<ActionResult> CreateCustomer([FromBody] CreateCustomerDetailsDto dto)
+        [HttpPost("register")]
+        public async Task<ActionResult> Create([FromBody] CreateCustomerDetailsDto dto)
         {
+            // Check if customer already exists
+            var existing = await repository.FindByEmailOrPhoneAsync(dto.Email, dto.Phone);
+            if (existing != null)
+            {
+                return Conflict(new
+                {
+                    message = "A customer with the same email or phone already exists.",
+                    customerId = existing.Id
+                });
+            }
+
             var customer = mapper.Map<CustomerDetails>(dto);
             customer.CreatedAt = customer.UpdatedAt = DateTime.UtcNow;
 
             await repository.AddAsync(customer);
             await repository.SaveChangesAsync();
 
-            return Ok(new { Message = "Customer created successfully" });
+            return Ok(new
+            {
+                message = "Customer created successfully",
+                customerId = customer.Id
+            });
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> UpdateCustomer([FromBody] UpdateCustomerDetailsDto dto)
+        [HttpPut("update/{customerId}")]
+        public async Task<ActionResult> Update(int customerId, [FromBody] UpdateCustomerDetailsDto dto)
         {
-            var customer = await repository.GetByIdAsync(dto.Id);
+            if (customerId != dto.Id) return BadRequest();
+
+            var customer = await repository.GetByIdAsync(customerId);
             if (customer == null) return NotFound();
 
             mapper.Map(dto, customer);
@@ -55,15 +69,26 @@ namespace Recosys.Backend.Api.Controllers.Customer
             await repository.UpdateAsync(customer);
             await repository.SaveChangesAsync();
 
-            return Ok(new { Message = "Customer updated successfully" });
+            return Ok(new
+            {
+                message = "Customer details updated successfully",
+                customerId = customer.Id
+            });
         }
 
-        [HttpPost("delete")]
-        public async Task<ActionResult> Delete([FromBody] IdRequest request)
+        [HttpDelete("remove/{customerId}")]
+        public async Task<ActionResult> Delete(int customerId)
         {
-            await repository.DeleteAsync(request.Id);
+            var existing = await repository.GetByIdAsync(customerId);
+            if (existing == null) return NotFound();
+
+            await repository.DeleteAsync(customerId);
             await repository.SaveChangesAsync();
-            return NoContent();
+
+            return Ok(new
+            {
+                message = "Customer details deleted successfully",
+            });
         }
     }
 }

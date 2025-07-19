@@ -25,6 +25,12 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
             await context.Customers.AddAsync(customer);
         }
 
+        public async Task<CustomerDetails?> FindByEmailOrPhoneAsync(string email, string phone)
+        {
+            return await context.Customers
+                .FirstOrDefaultAsync(c => c.Email == email || c.Phone == phone);
+        }
+
         public async Task UpdateAsync(CustomerDetails customer)
         {
             context.Customers.Update(customer);
