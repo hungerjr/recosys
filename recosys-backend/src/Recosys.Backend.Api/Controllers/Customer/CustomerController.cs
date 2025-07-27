@@ -11,7 +11,7 @@ namespace Recosys.Backend.Api.Controllers.Customer
 {
     [ApiController]
     [Route("api/customers")]
-    public class CustomerController(ICustomerRepository repository, IMapper mapper) : ControllerBase
+    public class CustomerController(ICustomerRepository repository, ICustomerAddressRepository customerAddressRepository, IMapper mapper) : ControllerBase
     {
         [HttpGet("get-all")]
         public async Task<ActionResult<IEnumerable<CustomerDetailsDto>>> GetAll()
@@ -47,6 +47,15 @@ namespace Recosys.Backend.Api.Controllers.Customer
 
             await repository.AddAsync(customer);
             await repository.SaveChangesAsync();
+
+            if (dto.Address is not null)
+            {
+                var address = mapper.Map<CustomerAddress>(dto.Address);
+                address.CustomerId = customer.Id;
+                address.IsDefault = true;
+
+                await customerAddressRepository.AddAsync(address);
+            }
 
             return Ok(new
             {

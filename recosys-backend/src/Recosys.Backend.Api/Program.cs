@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "https://localhost:3000",
-                "https://7732cce4fbd6.ngrok-free.app"
+                "https://54a89eb292d7.ngrok-free.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -89,7 +89,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddAutoMapper(typeof(CustomerProfile));
+builder.Services.AddAutoMapper(typeof(CustomerProfile), typeof(AddressProfile), typeof(CustomerProfile));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

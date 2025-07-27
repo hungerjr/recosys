@@ -26,6 +26,7 @@ namespace Recosys.Backend.Api.Extensions
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPasswordResetRepository, PasswordResetRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerAddressRepository, CustomerAddressRepository>();
 
             // Register Service
             services.AddScoped<PasswordResetService>();
