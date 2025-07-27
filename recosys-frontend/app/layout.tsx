@@ -1,38 +1,33 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { ThemeProvider } from './components/theme-provider'
-import { ThemeToggle } from './components/ui/theme-toggle'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "./components/ui/theme-provider";
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: 'ReCoSys',
-  description: 'Login and Registration ',
-}
+export const metadata = {
+  title: "Recosys",
+  description: "Modern Control Systems",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans`}>
+      {/* Applying your custom theme colors */}
+      <body className={`${inter.className} bg-light-background text-light-foreground dark:bg-dark-background dark:text-dark-foreground`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-         <ThemeToggle />  
           {children}
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

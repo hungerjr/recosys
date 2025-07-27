@@ -1,99 +1,34 @@
-import React, { useState } from 'react'
-     import { Eye, EyeOff } from 'lucide-react'
+'use client'
 
-     interface ModernInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-       label: string
-       error?: string
-       icon?: React.ReactNode
-     }
+import React from 'react';
 
-     export const ModernInput: React.FC<ModernInputProps> = ({
-       label,
-       error,
-       icon,
-       type = 'text',
-       className = '',
-       ...props
-     }) => {
-       const [showPassword, setShowPassword] = useState(false)
-       const [isFocused, setIsFocused] = useState(false)
-       const [hasValue, setHasValue] = useState(false)
+type ModernInputProps = {
+  label: string;
+  error?: string;
+  icon?: React.ReactNode; // Prop for the icon
+  iconPosition?: 'left' | 'right';
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
-       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-         setHasValue(e.target.value.length > 0)
-         if (props.onChange) {
-           props.onChange(e)
-         }
-       }
+export function ModernInput({ label, error, icon, iconPosition = 'right', ...props }: ModernInputProps) {
+  const iconPadding = icon ? (iconPosition === 'right' ? 'pr-10' : 'pl-10') : '';
 
-       const inputType = type === 'password' ? (showPassword ? 'text' : 'password') : type
-
-       return (
-         <div className="relative group">
-           <div className="relative">
-             <input
-               type={inputType}
-               className={`
-                 peer w-full px-4 py-4 pt-6 text-base bg-white/10 dark:bg-black/10 backdrop-blur-md 
-                 border border-white/20 dark:border-white/10 rounded-xl
-                 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent
-                 placeholder-transparent transition-all duration-300
-                 modern-input
-                 ${error ? 'border-red-500/50 focus:ring-red-500/50' : ''}
-                 ${className}
-               `}
-               placeholder={label}
-               onFocus={() => setIsFocused(true)}
-               onBlur={() => setIsFocused(false)}
-               onChange={handleInputChange}
-               {...props}
-             />
-             
-             {/* Floating label */}
-             <label
-               className={`
-                 absolute left-4 transition-all duration-300 pointer-events-none
-                 ${isFocused || hasValue || props.value
-                   ? 'top-2 text-xs text-blue-600 dark:text-blue-400'
-                   : 'top-4 text-base text-gray-500 dark:text-gray-400'
-                 }
-               `}
-             >
-               {label}
-             </label>
-
-             {/* Left icon */}
-             {icon && (
-               <div className="absolute left-4 top-4 text-gray-400 dark:text-gray-500">
-                 {icon}
-               </div>
-             )}
-
-             {/* Password toggle */}
-             {type === 'password' && (
-               <button
-                 type="button"
-                 onClick={() => setShowPassword(!showPassword)}
-                 className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-               >
-                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-               </button>
-             )}
-           </div>
-
-           {/* Error message */}
-           {error && (
-             <div className="mt-2 text-sm text-red-500 animate-in slide-in-from-top-1 duration-300">
-               {error}
-             </div>
-           )}
-
-           {/* Animated border */}
-           <div className={`
-             absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600
-             transition-opacity duration-300 -z-10
-             ${isFocused ? 'opacity-20' : 'opacity-0'}
-           `} />
-         </div>
-       )
-     }
+  return (
+    <div className="space-y-2">
+      <label htmlFor={props.id || props.name} className="block text-sm font-medium text-light-muted-foreground dark:text-dark-muted-foreground">
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          {...props}
+          className={`block w-full rounded-md border-0 bg-light-background/50 py-2.5 text-light-foreground shadow-sm ring-1 ring-inset ring-black/10 transition placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-light-primary dark:bg-dark-card/50 dark:text-dark-foreground dark:ring-white/10 dark:focus:ring-dark-primary sm:text-sm ${iconPadding}`}
+        />
+        {icon && (
+          <div className={`absolute inset-y-0 flex items-center ${iconPosition === 'right' ? 'right-0 pr-3' : 'left-0 pl-3'}`}>
+            {icon}
+          </div>
+        )}
+      </div>
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+    </div>
+  );
+}

@@ -1,109 +1,53 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { ArrowRight, Sparkles, Shield, Zap } from "lucide-react";
-import { ThemeToggle } from "./components/ui/theme-toggle";
-import { FloatingElements } from "./components/ui/floating-elements";
-import { ModernButton } from "./components/ui/modern-button";
+import Link from 'next/link'
+import { Package, ArrowRight } from 'lucide-react'
+import { ThemeToggle } from './components/ui/theme-toggle'
 
-export default function HomePage() {
+export default function LandingPage() {
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Animated background */}
-      <div className="fixed inset-0 animated-gradient opacity-20"></div>
-
-      {/* Floating elements */}
-      <FloatingElements />
-
-      {/* Theme toggle */}
-
-      {/* Main content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-4xl">
-          {/* Hero section */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl mb-8 animate-pulse-glow">
-              <Sparkles className="w-10 h-10 text-white" />
-            </div>
-            <h1 className="text-6xl md:text-7xl font-bold gradient-text mb-6">
-             ReCoSys
-              <br />
-              Technologies
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-              Experience the future of living spaces with our cutting-edge
-              control system. Beautiful, secure, and built for the modern lifestyle.
-            </p>
-
-            {/* CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/login">
-                <ModernButton size="lg" className="w-full sm:w-auto">
-                  Get Started
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </ModernButton>
-              </Link>
-              <Link href="/register">
-                <ModernButton
-                  variant="secondary"
-                  size="lg"
-                  className="w-full sm:w-auto"
-                >
-                  Create Account
-                </ModernButton>
-              </Link>
-            </div>
-          </div>
-
-          {/* Features grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {/* Feature 1 */}
-            <div className="glass rounded-2xl p-8 text-center backdrop-blur-xl border border-white/20 dark:border-white/10 hover:border-white/30 dark:hover:border-white/20 transition-all duration-300 group">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Zap className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                Lightning Fast
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Optimized for speed and performance with modern living spaces.
-                
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="glass rounded-2xl p-8 text-center backdrop-blur-xl border border-white/20 dark:border-white/10 hover:border-white/30 dark:hover:border-white/20 transition-all duration-300 group">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                Quality
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Robust by design
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="glass rounded-2xl p-8 text-center backdrop-blur-xl border border-white/20 dark:border-white/10 hover:border-white/30 dark:hover:border-white/20 transition-all duration-300 group">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-600 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-                Beautiful Design
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Stunning features.
-              </p>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-            <p>© ReCoSys. All rights reserved.</p>
-          </div>
-        </div>
+    <div className="relative min-h-screen w-full overflow-x-hidden">
+      {/* Background aurora effect */}
+      <div className="absolute top-0 left-0 -z-10 h-full w-full bg-light-background dark:bg-dark-background">
+        <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[20%] translate-y-[20%] rounded-full bg-[rgba(85,81,255,0.4)] opacity-50 blur-[80px]"></div>
       </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-black/5 bg-light-card/30 backdrop-blur-lg dark:border-white/10 dark:bg-dark-card/30">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+          <Link href="/" className="flex items-center gap-2">
+            <Package className="h-7 w-7" />
+            <span className="text-xl font-bold">Recosys</span>
+          </Link>
+          <nav className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link href="/login" className="hidden text-sm font-medium text-light-muted-foreground hover:text-light-foreground dark:text-dark-muted-foreground dark:hover:text-dark-foreground transition-colors sm:block">
+              Sign In
+            </Link>
+            <Link href="/register" className="inline-flex h-9 items-center justify-center rounded-md bg-light-primary px-4 text-sm font-medium text-light-primary-foreground shadow transition-colors hover:bg-light-primary/90 dark:bg-dark-primary dark:text-dark-primary-foreground dark:hover:bg-dark-primary/90">
+              Get Started
+            </Link>
+          </nav>
+        </div>
+      </header>
+      
+      <main>
+        {/* Hero Section */}
+        <section className="container mx-auto flex flex-col items-center justify-center space-y-8 px-4 py-24 text-center md:py-32">
+          <h1 className="text-5xl font-extrabold tracking-tighter sm:text-6xl md:text-7xl">
+            The Future of  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Easy Control</span>
+          </h1>
+          <p className="max-w-2xl text-lg text-light-muted-foreground dark:text-dark-muted-foreground md:text-xl">
+            Recosys provides unparalleled security and intuitive control for your electronics, all from a single, powerful dashboard.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/register" className="group inline-flex h-12 items-center justify-center rounded-full bg-light-primary px-8 text-base font-semibold text-light-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95 dark:bg-dark-primary dark:text-dark-primary-foreground">
+              Create Your Account
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </section>
+      </main>
     </div>
-  );
+  )
 }
