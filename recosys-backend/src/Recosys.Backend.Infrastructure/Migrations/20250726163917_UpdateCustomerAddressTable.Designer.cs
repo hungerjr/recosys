@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recosys.Backend.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Recosys.Backend.Infrastructure.Persistence;
 namespace Recosys.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250726163917_UpdateCustomerAddressTable")]
+    partial class UpdateCustomerAddressTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +32,6 @@ namespace Recosys.Backend.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -50,6 +49,13 @@ namespace Recosys.Backend.Infrastructure.Migrations
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Line1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Line2")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Pincode")
                         .IsRequired()
@@ -94,7 +100,7 @@ namespace Recosys.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerDetails");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Recosys.Backend.Domain.Entities.Products.ProductDetails", b =>

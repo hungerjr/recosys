@@ -12,28 +12,33 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
 
         public async Task<IEnumerable<CustomerDetails>> GetAllAsync()
         {
-            return await context.Customers.ToListAsync();
+            return await context.CustomerDetails
+                .Include(c => c.Addresses)
+                .ToListAsync();
         }
 
         public async Task<CustomerDetails> GetByIdAsync(int id)
         {
-            return await context.Customers.FindAsync(id);
+            return await context.CustomerDetails
+                .Include(c => c.Addresses)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task AddAsync(CustomerDetails customer)
         {
-            await context.Customers.AddAsync(customer);
+            await context.CustomerDetails.AddAsync(customer);
         }
 
         public async Task<CustomerDetails?> FindByEmailOrPhoneAsync(string email, string phone)
         {
-            return await context.Customers
+            return await context.CustomerDetails
+                .Include(c => c.Addresses)
                 .FirstOrDefaultAsync(c => c.Email == email || c.Phone == phone);
         }
 
         public async Task UpdateAsync(CustomerDetails customer)
         {
-            context.Customers.Update(customer);
+            context.CustomerDetails.Update(customer);
             await context.SaveChangesAsync();
         }
 
@@ -42,7 +47,7 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
             var customer = await GetByIdAsync(id);
             if (customer != null)
             {
-                context.Customers.Remove(customer);
+                context.CustomerDetails.Remove(customer);
             }
         }
 

@@ -1,8 +1,5 @@
 ﻿using Recosys.Backend.Domain.Entities.Customer;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Recosys.Backend.Application.Interfaces.Customer

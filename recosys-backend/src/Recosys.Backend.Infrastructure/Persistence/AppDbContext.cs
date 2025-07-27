@@ -17,7 +17,8 @@ namespace Recosys.Backend.Infrastructure.Persistence
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<ProductDetails> Products { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
-        public DbSet<CustomerDetails> Customers { get; set; }
+        public DbSet<CustomerDetails> CustomerDetails { get; set; }
+        public DbSet<CustomerAddress> CustomerAddresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +61,13 @@ namespace Recosys.Backend.Infrastructure.Persistence
                 .WithMany(u => u.PasswordResetTokens)
                 .HasForeignKey(t => t.UserInfoId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            //
+            modelBuilder.Entity<CustomerDetails>()
+            .HasMany(c => c.Addresses)
+            .WithOne(a => a.Customer)
+            .HasForeignKey(a => a.CustomerId)
+            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
