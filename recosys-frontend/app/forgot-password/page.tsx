@@ -1,55 +1,62 @@
 'use client'
 
+// Import necessary hooks and components
 import { useState } from 'react'
 import Link from 'next/link'
 import { KeyRound, Mail, ArrowLeft } from 'lucide-react'
 import { ThemeToggle } from '@/app/components/ui/theme-toggle'
 import { ModernInput } from '@/app/components/ui/modern-input'
 import { ModernButton } from '@/app/components/ui/modern-button'
-import API from '@/lib/axios'
+// import API from '@/lib/axios';
 
 export default function ForgotPasswordPage() {
+  // State for the email input, loading indicator, and success view
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async(e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
+  // Handler for form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    
+    // Simple frontend validation
     if (!email) {
-      setError('Email is required')
-      return
-    } else if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address')
-      return
+      setError('Email is required');
+      return;
     }
 
-    setLoading(true)
-    // // --- Dummy API Call ---
-    // console.log("Simulating password reset for:", email);
-    // setTimeout(() => {
-    //   setLoading(false)
-    //   setSent(true)
-    // }, 1500)
+    setLoading(true);
+    const useDummyApi = process.env.NEXT_PUBLIC_USE_DUMMY_API === 'true';
 
-    // --- Real API Call ---
-    try {
-      var base_url = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const response = await API.post(base_url+'/user/forgot-password',  email );
-      console.log('Password reset link sent:', response.data);
-      setLoading(false);
-      setSent(true);
-    } catch (error) {
-      console.error('Password reset error:', error);
-      setLoading(false);
-      setError('Failed to send password reset link. Please try again.');
+    if (useDummyApi) {
+        // --- DUMMY API LOGIC ---
+        const MOCK_UNREGISTERED_EMAIL = 'nouser@example.com';
+        setTimeout(() => {
+            if (email === MOCK_UNREGISTERED_EMAIL) {
+                setError('No user found with this email address.');
+            } else {
+                setSent(true); // Show the success view
+            }
+            setLoading(false);
+        }, 1500);
+    } else {
+        // --- REAL API LOGIC ---
+        try {
+            // 1. Send the email to your backend to trigger the password reset flow
+            // await API.post('/auth/forgot-password', { email });
+            
+            // 2. On success, show the confirmation screen
+            setSent(true);
+        } catch (error: any) {
+            setError(error.response?.data?.message || 'Failed to send reset link.');
+            setLoading(false);
+        }
     }
   }
 
-  // This is the view shown after the user successfully submits their email
+  // If the email has been "sent", show the confirmation view
   if (sent) {
     return (
       <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4">
@@ -81,7 +88,7 @@ export default function ForgotPasswordPage() {
     )
   }
 
-  // This is the initial form view
+  // The initial form view
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4">
       <div className="absolute top-0 left-0 -z-10 h-full w-full bg-light-background dark:bg-dark-background">
