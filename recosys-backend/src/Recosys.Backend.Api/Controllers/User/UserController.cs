@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Recosys.Backend.Application.DTOs.User;
@@ -81,6 +82,29 @@ namespace Recosys.Backend.Api.Controllers.User
             return Ok("Password reset successfully.");
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            if (string.IsNullOrEmpty(email))
+                return Unauthorized("Invalid token");
+
+            var user = await userRepository.GetByEmailAsync(email);
+            if (user == null)
+                return NotFound("User not found");
+
+            var userDto = new UserProfileDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email
+            };
+
+            return Ok(userDto);
+        }
+
         private string GenerateJwtToken(UserInfo user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
@@ -91,12 +115,11 @@ namespace Recosys.Backend.Api.Controllers.User
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.UserRole?.Name ?? "User")
             };
-
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddHours(240),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

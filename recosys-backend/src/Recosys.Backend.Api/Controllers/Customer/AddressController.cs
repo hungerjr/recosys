@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Recosys.Backend.Application.DTOs.Customer;
 using Recosys.Backend.Application.Interfaces.Customer;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace Recosys.Backend.Api.Controllers.Customer
 {
     [ApiController]
+    [Authorize]
     [Route("api/addresses")]
     public class AddressController(ICustomerAddressRepository repository, IMapper mapper) : ControllerBase
     {
@@ -85,6 +87,16 @@ namespace Recosys.Backend.Api.Controllers.Customer
             return Ok(new
             {
                 message = "Address deleted successfully"
+            });
+        }
+
+        [HttpDelete("delete-all/{customerId}")]
+        public async Task<IActionResult> DeleteAllAddresses(int customerId)
+        {
+            await repository.DeleteAllByCustomerIdAsync(customerId);
+            return Ok(new
+            {
+                message = "All the addresses of the customer deleted successfully"
             });
         }
 

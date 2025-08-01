@@ -12,6 +12,7 @@ namespace Recosys.Backend.Application.Interfaces.Customer
         Task AddAsync(CustomerAddress address);
         Task UpdateAsync(CustomerAddress address);
         Task DeleteAsync(int id);
+        Task DeleteAllByCustomerIdAsync(int customerId);
         Task SaveChangesAsync();
     }
 }

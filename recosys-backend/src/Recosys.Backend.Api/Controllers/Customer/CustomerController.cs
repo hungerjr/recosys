@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Recosys.Backend.Application.Common.Models;
 using Recosys.Backend.Application.DTOs.Customer;
 using Recosys.Backend.Application.Interfaces.Customer;
+using Recosys.Backend.Application.Interfaces.ShipRocket;
 using Recosys.Backend.Domain.Entities.Customer;
 using System;
 using System.Collections.Generic;
@@ -10,14 +13,36 @@ using System.Threading.Tasks;
 namespace Recosys.Backend.Api.Controllers.Customer
 {
     [ApiController]
+    [Authorize]
     [Route("api/customers")]
-    public class CustomerController(ICustomerRepository repository, ICustomerAddressRepository customerAddressRepository, IMapper mapper) : ControllerBase
+    public class CustomerController(ICustomerRepository repository, ICustomerAddressRepository customerAddressRepository,
+        IMapper mapper, IShiprocketService shiprocketService) : ControllerBase
     {
         [HttpGet("get-all")]
-        public async Task<ActionResult<IEnumerable<CustomerDetailsDto>>> GetAll()
+        public async Task<ActionResult<PagedResult<CustomerDetailsDto>>> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string sortBy = "id",
+            [FromQuery] string sortOrder = "asc",
+            [FromQuery] string? nameFilter = null,
+            [FromQuery] string? emailFilter = null,
+            [FromQuery] string? phoneFilter = null)
         {
-            var customers = await repository.GetAllAsync();
-            return Ok(mapper.Map<IEnumerable<CustomerDetailsDto>>(customers));
+            var pagedResult = await repository.GetPagedWithDefaultAddressAsync(
+                pageNumber, pageSize, sortBy, sortOrder,
+                nameFilter, emailFilter, phoneFilter
+            );
+
+            var mappedItems = mapper.Map<IEnumerable<CustomerDetailsDto>>(pagedResult.Items);
+       
+            var result = new PagedResult<CustomerDetailsDto>(
+                mappedItems,
+                pagedResult.TotalCount,
+                pagedResult.PageNumber,
+                pagedResult.PageSize
+            );
+
+            return Ok(result);
         }
 
         [HttpGet("details/{customerId}")]
@@ -97,6 +122,21 @@ namespace Recosys.Backend.Api.Controllers.Customer
             return Ok(new
             {
                 message = "Customer details deleted successfully",
+            });
+        }
+
+        [HttpPost("sync-shiprocket-customers")]
+        public async Task<IActionResult> SyncShiprocketCustomers()
+        {
+            var shiprocketCustomers = await shiprocketService.FetchAllShiprocketCustomersAsync();
+
+            var (insertedCount, skippedFromJson, skippedFromDb) = await repository.BulkInsertCustomersAsync(shiprocketCustomers);
+
+            return Ok(new
+            {
+                Inserted = insertedCount,
+                SkippedDueToJsonDuplicates = skippedFromJson,
+                SkippedBecauseAlreadyExistInDb = skippedFromDb
             });
         }
     }

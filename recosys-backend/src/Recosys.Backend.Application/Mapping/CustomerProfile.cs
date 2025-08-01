@@ -2,7 +2,6 @@
 using Recosys.Backend.Application.DTOs.Customer;
 using Recosys.Backend.Domain.Entities.Customer;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Recosys.Backend.Application.Mapping
 {
@@ -39,7 +38,7 @@ namespace Recosys.Backend.Application.Mapping
             // ✅ CustomerDetails → CustomerDetailsDto
             CreateMap<CustomerDetails, CustomerDetailsDto>()
                 .ForMember(dest => dest.DefaultAddress,
-                           opt => opt.MapFrom(src => src.Addresses.FirstOrDefault(a => a.IsDefault)));
+                           opt => opt.MapFrom(src => src.DefaultAddress));
         }
     }
 }

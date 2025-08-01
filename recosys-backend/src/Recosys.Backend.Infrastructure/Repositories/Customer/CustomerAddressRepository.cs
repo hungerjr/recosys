@@ -95,6 +95,16 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
             }
         }
 
+        public async Task DeleteAllByCustomerIdAsync(int customerId)
+        {
+            var addresses = await context.CustomerAddresses
+                .Where(a => a.CustomerId == customerId)
+                .ToListAsync();
+
+            context.CustomerAddresses.RemoveRange(addresses);
+            await context.SaveChangesAsync();
+        }
+
         public async Task SaveChangesAsync()
         {
             await context.SaveChangesAsync();

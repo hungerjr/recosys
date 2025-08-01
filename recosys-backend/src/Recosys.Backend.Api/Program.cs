@@ -66,6 +66,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
@@ -80,7 +81,9 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "https://localhost:3000",
-                "https://54a89eb292d7.ngrok-free.app"
+                "https://localhost:5000",
+                "https://localhost:5001",
+                "https://8505e475aa2a.ngrok-free.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()

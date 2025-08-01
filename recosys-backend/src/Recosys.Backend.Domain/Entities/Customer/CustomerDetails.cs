@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace Recosys.Backend.Domain.Entities.Customer
 {
@@ -17,7 +16,7 @@ namespace Recosys.Backend.Domain.Entities.Customer
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         [NotMapped]
-        public CustomerAddress? DefaultAddress => Addresses?.FirstOrDefault(a => a.IsDefault);
+        public CustomerAddress? DefaultAddress { get; set; }
 
         //Navigation Property
         public ICollection<CustomerAddress> Addresses { get; set; } = [];

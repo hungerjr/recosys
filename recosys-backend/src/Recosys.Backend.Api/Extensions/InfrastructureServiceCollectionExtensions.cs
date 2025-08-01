@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Recosys.Backend.Application.Interfaces.Customer;
 using Recosys.Backend.Application.Interfaces.Products;
+using Recosys.Backend.Application.Interfaces.ShipRocket;
 using Recosys.Backend.Application.Interfaces.User;
 using Recosys.Backend.Application.Services;
 using Recosys.Backend.Infrastructure.Persistence;
@@ -27,6 +28,7 @@ namespace Recosys.Backend.Api.Extensions
             services.AddScoped<IPasswordResetRepository, PasswordResetRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerAddressRepository, CustomerAddressRepository>();
+            services.AddHttpClient<IShiprocketService, ShiprocketService>();
 
             // Register Service
             services.AddScoped<PasswordResetService>();
