@@ -38,6 +38,7 @@ bin/
 obj/
 .vs/
 *.zip
+appsettings.json
 
 # ---------------------
 # Local SSL Certificates

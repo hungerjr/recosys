@@ -47,7 +47,7 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
                             CASE WHEN @sortBy = 'email' AND @sortOrder = 'desc' THEN c.Email END DESC,
                             CASE WHEN @sortBy = 'phone' AND @sortOrder = 'asc' THEN c.Phone END ASC,
                             CASE WHEN @sortBy = 'phone' AND @sortOrder = 'desc' THEN c.Phone END DESC,
-                            c.Id
+                            c.Id DESC
                         OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY;
 
                         SELECT COUNT(*) 
