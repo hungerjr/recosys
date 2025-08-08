@@ -1,44 +1,77 @@
-export type Order = {
+// Define the structure for a Customer
+export type Customer = {
   id: string;
-  orderDate: string;
+  fname: string;
+  lname: string;
+  mobile: string;
+  email: string;
   channel: string;
-  customerName: string;
-  amount: number;
-  payment: 'Prepaid' | 'COD';
-  status: 'New' | 'Ready to Ship' | 'Shipped' | 'Delivered';
-  awb: string | null;
-  parcelImageUrl?: string | null;
+  created_at: string;
+  address: string;
+  pincode: string;
+  city: string;
+  state: string;
 };
 
+// Define the structure for an Order, with the missing fields re-added
+export type Order = {
+  id: string;
+  customerId: string;
+  orderDate: string;
+  shippedDate: string | null;
+  status: 'New' | 'Ready to Ship' | 'Shipped' | 'Delivered' | 'Pending';
+  amount: number;   // <-- Re-added this field
+  payment: 'Prepaid' | 'COD'; // <-- Re-added this field
+};
+
+// Sample Customer Data
+export const customers: Customer[] = [
+  {
+    id: 'cust_001',
+    fname: 'Nitesh',
+    lname: 'jairam',
+    mobile: 'xxxx-xxxxxx',
+    email: '5xj0ivkkegth0zz@marketplace.amazon.in',
+    channel: 'Amazon',
+    created_at: '28 Oct 2019',
+    address: 'No 31, 9th Cross, 1st Main, Amba Bhavani layout, Yeshanka Doddabettahalli',
+    pincode: '560097',
+    city: 'Bengaluru',
+    state: 'Karnataka',
+  },
+  {
+    id: 'cust_002',
+    fname: 'Rajendra',
+    lname: 'Prasad',
+    mobile: 'xxxx-xxxxxx',
+    email: 'zftcst3b6h0716p@marketplace.amazon.in',
+    channel: 'Amazon',
+    created_at: '25 Jul 2025',
+    address: 'Soni Home, Anand Colony, Parvati Path, New Chitragupta Nagar',
+    pincode: '800020',
+    city: 'Patna',
+    state: 'Bihar',
+  },
+];
+
+// Sample Order Data, now with amount and payment details
 export const orders: Order[] = [
-  {
-    id: '406-3472330-6603557',
-    orderDate: '14 Jul 2025 | 09:03 AM',
-    channel: 'AMAZON_IN',
-    customerName: 'Rajendra Prasad',
-    amount: 1493.00,
-    payment: 'Prepaid',
-    status: 'New',
-    awb: null,
-  },
-  {
-    id: '406-9328761-5648917',
-    orderDate: '14 Jul 2025 | 08:01 AM',
-    channel: 'AMAZON_IN',
-    customerName: 'Manish K Mishra',
-    amount: 969.00,
-    payment: 'Prepaid',
-    status: 'Ready to Ship',
-    awb: '123456789012',
-  },
-  {
-    id: '408-9175143-8187983',
-    orderDate: '14 Jul 2025 | 06:03 AM',
-    channel: 'AMAZON_IN',
-    customerName: 'Rajkumar Pilli',
-    amount: 639.00,
-    payment: 'Prepaid',
-    status: 'Shipped',
-    awb: '987654321098',
-  },
+    {
+        id: '404-8312720-4888338',
+        customerId: 'cust_001',
+        orderDate: '28 Oct 2019',
+        shippedDate: null,
+        status: 'Pending',
+        amount: 1250.00, // <-- Added value
+        payment: 'COD',    // <-- Added value
+    },
+    {
+        id: '406-3472330-6603557',
+        customerId: 'cust_002',
+        orderDate: '25 Jul 2025',
+        shippedDate: '25 Jul 2025',
+        status: 'Shipped',
+        amount: 1493.00, // <-- Added value
+        payment: 'Prepaid',// <-- Added value
+    },
 ];

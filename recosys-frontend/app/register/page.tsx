@@ -3,12 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner' // 1. Import the toast function
 import { ArrowRight, UserPlus, Eye, EyeOff } from 'lucide-react'
 import { ThemeToggle } from '@/app/components/ui/theme-toggle'
 import { ModernInput } from '@/app/components/ui/modern-input'
 import { ModernButton } from '@/app/components/ui/modern-button'
-// We assume an API instance is configured, e.g., using axios
-import API from '@/lib/axios'; 
+// import API from '@/lib/axios';
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -21,28 +21,25 @@ export default function RegisterPage() {
   })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
-
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  // Complete client-side validation logic
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {}
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     
+    if (!formData.name) newErrors.name = 'Full name is required'
     if (!formData.email) {
       newErrors.email = 'Email is required'
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Please enter a valid email'
     }
-
-    // --- UPDATED: Phone number validation now checks for exactly 10 digits ---
     if (!formData.phone) {
         newErrors.phone = 'Phone number is required'
     } else if (formData.phone.length !== 10) {
         newErrors.phone = 'Phone number must be a valid 10-digit number'
     }
-
-    if (!formData.name) newErrors.name = 'Full name is required'
     if (!formData.password) {
       newErrors.password = 'Password is required'
     } else if (formData.password.length < 8) {
@@ -56,45 +53,51 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  // --- UPDATED: This now allows typing more than 10 digits, validation happens on submit ---
+  // Logic to allow only numbers in the phone field
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // This regex ensures only digits can be typed
     if (/^\d*$/.test(value)) {
       setFormData({ ...formData, phone: value });
     }
   };
 
-  // --- UPDATED: Function is now 'async' to support a real API call ---
+  // Handler for form submission, now with toasts
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validateForm()) return
-
-    setLoading(true)
-
-    // --- Dummy API Call (for frontend development) ---
-    console.log("Simulating registration with:", formData);
-    setTimeout(() => {
-      console.log('Dummy registration successful!');
-      setLoading(false);
-      router.push('/login');
-    }, 1500);
-
-    // --- Real API Call (Commented Out) ---
-    // When you are ready to connect your backend, you can remove the
-    // setTimeout block above and uncomment this try...catch block.
-    try {
-      var base_url = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const response = await API.post(base_url+'/user/register', formData);
-      console.log('Registration successful:', response.data);
-      setLoading(false);
-      router.push('/login');
-    } catch (error) {
-      setLoading(false);
-      console.error('Registration error:', error);
-      setErrors({ api: "Registration failed. Please try again." });
+    // Clear field-specific errors before validating
+    setErrors({});
+    if (!validateForm()) {
+        toast.error('Please fix the errors in the form.');
+        return;
     }
 
+    setLoading(true)
+    const useDummyApi = process.env.NEXT_PUBLIC_USE_DUMMY_API === 'true';
+
+    if (useDummyApi) {
+      // --- DUMMY API LOGIC ---
+      const MOCK_EXISTING_USER_EMAIL = 'user@example.com';
+      setTimeout(() => {
+        if (formData.email === MOCK_EXISTING_USER_EMAIL) {
+          toast.error('Registration Failed', { description: 'A user with this email already exists.' });
+        } else {
+          toast.success('Account Created!', { description: 'You will be redirected to the login page.' });
+          setTimeout(() => router.push('/login'), 1000); // Redirect after a short delay
+          return;
+        }
+        setLoading(false);
+      }, 1500);
+    } else {
+      // --- REAL API LOGIC ---
+      try {
+        // const response = await API.post('/auth/register', formData);
+        toast.success('Account Created!', { description: 'You will now be redirected to the login page.' });
+        setTimeout(() => router.push('/login'), 1000);
+      } catch (error: any) {
+        toast.error('Registration Failed', { description: error.response?.data?.message || "Please try again." });
+        setLoading(false);
+      }
+    }
   }
 
   return (
@@ -118,21 +121,31 @@ export default function RegisterPage() {
 
         <div className="rounded-2xl border border-black/5 bg-light-card/60 p-8 shadow-2xl backdrop-blur-lg dark:border-white/10 dark:bg-dark-card/50">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* The old {errors.api} div is no longer needed */}
             <ModernInput
-              label="Full Name" type="text" value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })} error={errors.name}
+              label="Full Name"
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              error={errors.name}
             />
             <ModernInput
-              label="Email Address" type="email" value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })} error={errors.email}
+              label="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              error={errors.email}
             />
             <ModernInput
-              label="Phone Number" type="tel" value={formData.phone}
-              onChange={handlePhoneChange} error={errors.phone}
+              label="Phone Number"
+              type="tel"
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              error={errors.phone}
             />
             <ModernInput
               label="Password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               error={errors.password}
@@ -144,7 +157,7 @@ export default function RegisterPage() {
             />
             <ModernInput
               label="Confirm Password"
-              type={showConfirmPassword ? 'text' : 'password'}
+              type={showConfirmPassword ? "text" : "password"}
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               error={errors.confirmPassword}
@@ -154,10 +167,9 @@ export default function RegisterPage() {
                 </button>
               }
             />
-            
             <div className="pt-2">
               <ModernButton type="submit" loading={loading} size="lg" className="w-full">
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? "Creating Account..." : "Create Account"}
                 {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
               </ModernButton>
             </div>
