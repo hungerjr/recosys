@@ -2,6 +2,7 @@
 {
     public class ShiprocketCustomerDto
     {
+        public string Id { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
         public string Mobile { get; set; }

@@ -34,7 +34,7 @@ namespace Recosys.Backend.Api.Controllers.Customer
             );
 
             var mappedItems = mapper.Map<IEnumerable<CustomerDetailsDto>>(pagedResult.Items);
-       
+
             var result = new PagedResult<CustomerDetailsDto>(
                 mappedItems,
                 pagedResult.TotalCount,
@@ -130,13 +130,11 @@ namespace Recosys.Backend.Api.Controllers.Customer
         {
             var shiprocketCustomers = await shiprocketService.FetchAllShiprocketCustomersAsync();
 
-            var (insertedCount, skippedFromJson, skippedFromDb) = await repository.BulkInsertCustomersAsync(shiprocketCustomers);
+            var insertedCount = await repository.BulkInsertCustomersAsync(shiprocketCustomers);
 
             return Ok(new
             {
-                Inserted = insertedCount,
-                SkippedDueToJsonDuplicates = skippedFromJson,
-                SkippedBecauseAlreadyExistInDb = skippedFromDb
+                Inserted = insertedCount
             });
         }
     }

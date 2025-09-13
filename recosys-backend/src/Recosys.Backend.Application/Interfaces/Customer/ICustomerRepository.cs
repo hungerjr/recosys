@@ -16,6 +16,6 @@ namespace Recosys.Backend.Application.Interfaces.Customer
         Task UpdateAsync(CustomerDetails customer);
         Task DeleteAsync(int id);
         Task<bool> SaveChangesAsync();
-        Task<(int insertedCount, List<string> skippedFromJson, List<string> skippedFromDb)> BulkInsertCustomersAsync(List<ShiprocketCustomerDto> customerDtos);
+        Task<int> BulkInsertCustomersAsync(List<ShiprocketCustomerDto> customerDtos);
     }
 }

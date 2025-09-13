@@ -198,70 +198,41 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
             return await context.SaveChangesAsync() > 0;
         }
 
-        public async Task<(int insertedCount, List<string> skippedFromJson, List<string> skippedFromDb)> BulkInsertCustomersAsync(List<ShiprocketCustomerDto> customerDtos)
+        public async Task<int> BulkInsertCustomersAsync(List<ShiprocketCustomerDto> customerDtos)
         {
             using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Separate entries with and without phone numbers
-                var entriesWithPhone = customerDtos
-                    .Where(c => !string.IsNullOrWhiteSpace(c.Mobile))
-                    .ToList();
+                var uniqueDtos = customerDtos
+                                .GroupBy(c => c.Id)
+                                .Select(g => g.First())
+                                .ToList();
 
-                var entriesWithoutPhone = customerDtos
-                    .Where(c => string.IsNullOrWhiteSpace(c.Mobile))
-                    .ToList();
+                var uniquePhoneDtos = uniqueDtos
+                                     .GroupBy(c=>c.Mobile)
+                                     .Select(g => g.First())
+                                     .ToList();
 
-                // 2a. Remove duplicate phone numbers (keep first)
-                var deduplicatedByPhone = entriesWithPhone
-                    .GroupBy(c => c.Mobile)
-                    .Select(g => g.First())
-                    .ToList();
-
-                var skippedFromJson = entriesWithPhone
-                    .GroupBy(c => c.Mobile)
-                    .Where(g => g.Count() > 1)
-                    .Select(g => g.Key)
-                    .ToList();
-
-                // 2b. Remove duplicate emails (keep first)
-                var deduplicatedByEmail = deduplicatedByPhone
-                    .GroupBy(c => c.Email?.Trim().ToLower())
-                    .Select(g => g.First())
-                    .ToList();
-
-                // 3. Remove existing phone numbers from DB
-                var existingPhones = await context.CustomerDetails
-                    .Where(c => deduplicatedByEmail.Select(x => x.Mobile).Contains(c.Phone))
-                    .Select(c => c.Phone)
-                    .ToListAsync();
-
-                var toInsertWithPhone = deduplicatedByEmail
-                    .Where(c => !existingPhones.Contains(c.Mobile))
-                    .ToList();
-
-                var skippedFromDb = existingPhones;
-
-                // 4. Combine with entries without phone
-                var combinedList = toInsertWithPhone.Concat(entriesWithoutPhone).ToList();
-
-                // 5. Filter out entries already in DB based on composite key match
                 var customersInDb = await context.CustomerDetails
                     .Include(c => c.Addresses)
                     .ToListAsync();
 
                 var toInsertFinal = new List<ShiprocketCustomerDto>();
 
-                foreach (var dto in combinedList)
+                foreach (var dto in uniquePhoneDtos)
                 {
                     var fullName = $"{dto.Fname?.Trim()} {dto.Lname?.Trim()}".Trim().ToLower();
                     var address = dto.Address?.Trim().ToLower();
+                    var email = dto.Email?.Trim().ToLower();
+                    var phone = dto.Mobile?.Trim().ToLower();
                     var city = dto.City?.Trim().ToLower();
                     var state = dto.State?.Trim().ToLower();
                     var pincode = dto.Pincode?.Trim().ToLower();
 
                     bool exists = customersInDb.Any(c =>
                         c.FullName.ToLower().Contains(fullName) &&
+                        c.Email.ToLower().Contains(email) &&
+                        c.Phone.ToLower().Contains(phone) &&
                         c.Addresses.Any(a =>
                             (a.Address?.ToLower().Contains(address) ?? false) &&
                             (a.City?.ToLower().Contains(city) ?? false) &&
@@ -275,7 +246,6 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
                     }
                 }
 
-                // 6. Insert new customers
                 var customers = new List<CustomerDetails>();
                 foreach (var dto in toInsertFinal)
                 {
@@ -290,16 +260,16 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
                         Addresses =
                         [
                             new CustomerAddress
-                    {
-                        Address = dto.Address,
-                        Pincode = dto.Pincode,
-                        City = dto.City,
-                        State = dto.State,
-                        Country = "India",
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        IsDefault = true
-                    }
+                            {
+                                Address = dto.Address,
+                                Pincode = dto.Pincode,
+                                City = dto.City,
+                                State = dto.State,
+                                Country = "India",
+                                CreatedAt = DateTime.UtcNow,
+                                UpdatedAt = DateTime.UtcNow,
+                                IsDefault = true
+                            }
                         ]
                     };
                     customers.Add(customer);
@@ -313,7 +283,7 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
 
                 await transaction.CommitAsync();
 
-                return (customers.Count, skippedFromJson, skippedFromDb);
+                return (customers.Count);
             }
             catch (Exception)
             {

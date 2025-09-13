@@ -66,14 +66,16 @@ namespace Recosys.Backend.Application.Services
                     {
                         PropertyNameCaseInsensitive = true
                     });
-
                     if (result?.Data == null || result.Data.Count < pageSize)
                     {
                         if (result?.Data != null)
+                        {
+                            await PopulateMissingMobileNumbersAsync(result.Data);
                             allCustomers.AddRange(result.Data);
+                        }
                         break;
                     }
-
+                    await PopulateMissingMobileNumbersAsync(result.Data);
                     allCustomers.AddRange(result.Data);
                     page++;
                 }
@@ -88,6 +90,52 @@ namespace Recosys.Backend.Application.Services
             }
 
             return allCustomers;
+        }
+
+        private async Task<string> GetCustomerMobileFromShiprocket(string customerId)
+        {
+            try
+            {
+                var response = await httpClient.GetAsync(
+                        $"https://apiv2.shiprocket.co/v1/customers/getcustomer/{customerId}");
+
+                if (!response.IsSuccessStatusCode) return string.Empty;
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                using var jsonDoc = JsonDocument.Parse(content);
+                var root = jsonDoc.RootElement;
+
+                var mobile = root
+                    .GetProperty("customer")
+                    .GetProperty("details")
+                    .GetProperty("mobile_no")
+                    .GetString();
+
+                return mobile;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private async Task PopulateMissingMobileNumbersAsync(List<ShiprocketCustomerDto> customers)
+        {
+            try
+            {
+                foreach (var customer in customers)
+                {
+                    if (string.IsNullOrEmpty(customer.Mobile))
+                    {
+                        customer.Mobile = await GetCustomerMobileFromShiprocket(customer.Id);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         private class LoginResponse
