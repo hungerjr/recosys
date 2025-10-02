@@ -1,0 +1,50 @@
+Shiprocket Order URL - https://apiv2.shiprocket.co/v1/orders?is_web=1&page=1&per_page=15&filter_by=status&fbs_all_orders=&courier_id=
+					   &payment_method=&tags=&channel_id=&pickup_address_id=&delivery_country=&filter_on=&searchMulti=&delivery_delay_reason=
+					   &from=2025-Aug-15&to=2025-Sep-13&date_type=date_created_at&filter=&is_international=&channel_sku=
+					   
+Possible stages of a shipment's journey -- 
+
+1.  Order Received: The order has been received by the courier partner.
+2.  Order Picked: The order has been picked up by the courier partner. 
+3.  Shipped: The shipment has reached the courier hub after a successful pickup. 
+4.  In-Transit: The shipment is moving between courier hubs.
+5.  Reached-at-Destination Hub: The shipment has arrived at the final destination hub.
+6.  Out for Delivery: The delivery executive is en route to deliver the shipment. 
+7.  Delivered: The shipment has been successfully delivered to the buyer.
+8.  Delayed: The delivery is taking longer than the initial estimated time. 
+9.  Misrouted: The delivery executive could not locate the customer's address.
+9.  Lost/Damaged: The shipment is lost or severely damaged.
+10. Destroyed: An undelivered or RTO shipment was not claimed by the seller.
+11. Undelivered: The delivery executive could not deliver the shipment due to various reasons (e.g., customer unavailability, incorrect address).	
+			
+			Id   --------------> Shiprocket_Order_Id
+			channel_name ------> 
+			channel_order_id -->
+			customer_name ----->
+			customer_email
+			customer_phone
+			customer_address
+			customer_address_2
+			customer_city
+			customer_state
+			customer_pincode
+			pickup_location
+			total
+			status_code
+			status	
+			
+		Shipments
+			id ------------------> Shiprocket Shipment Id
+			Courier ------------->
+			courier_id	 -------->
+			Weight -------------->
+			dimensions
+			shipped_date
+			pickup_scheduled_date
+			pickedup_timestamp
+			pickup_token_number
+			awb
+			rto_awb
+			return_awb
+			volumetric_weight
+			etd

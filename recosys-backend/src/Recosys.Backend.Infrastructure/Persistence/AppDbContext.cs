@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recosys.Backend.Domain.Entities.Customer;
+using Recosys.Backend.Domain.Entities.Order;
 using Recosys.Backend.Domain.Entities.Products;
 using Recosys.Backend.Domain.Entities.User;
 using System;
@@ -19,6 +20,13 @@ namespace Recosys.Backend.Infrastructure.Persistence
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<CustomerDetails> CustomerDetails { get; set; }
         public DbSet<CustomerAddress> CustomerAddresses { get; set; }
+        public DbSet<AWBData> AWBData { get; set; }
+        public DbSet<OrderDetails> Order { get; set; }
+        public DbSet<OrderActivity> OrderActivity { get; set; }
+        public DbSet<OrderProduct> OrderProduct { get; set; }
+        public DbSet<Shipment> Shipment { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
