@@ -1,23 +1,15 @@
-"use client";
+'use client'
 
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  ReactNode,
-} from "react";
+import React, { createContext, useState, useContext, useEffect, ReactNode, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import API from "@/lib/axios"; // Import our configured axios instance
+import API from "@/lib/axios";
 
-// Defines the shape of a user object in our application
 type User = {
   id: string;
   name: string;
   email: string;
 };
 
-// Defines the shape of the data and functions our context will provide
 interface AuthContextType {
   user: User | null;
   login: (token: string, userData: User) => void;
@@ -26,73 +18,46 @@ interface AuthContextType {
   isAuthenticated: boolean;
 }
 
-// Create the context with an initial undefined value
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// The AuthProvider component will wrap our entire app
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // This effect runs once when the app loads to check for a valid session
+  const logout = useCallback(() => {
+    localStorage.removeItem("authToken");
+    setUser(null);
+    router.push("/");
+  }, [router]);
+
   useEffect(() => {
     const verifyUserSession = async () => {
       const token = localStorage.getItem("authToken");
       if (token) {
-        console.log("Found token, verifying session with the /me endpoint...");
-
-        const useDummyApi = process.env.NEXT_PUBLIC_USE_DUMMY_API === "true";
-
-        if (useDummyApi) {
-          // --- DUMMY TOKEN VERIFICATION ---
-          setTimeout(() => {
-            setUser({
-              id: "user-123",
-              name: "Vaidik Jaiswal",
-              email: "vaidik@recosys.com",
-            });
-            setIsLoading(false);
-          }, 500);
-        } else {
-          // --- REAL TOKEN VERIFICATION ---
-          try {
-            // The axios interceptor will automatically add the token to this request
-            const base_url = process.env.NEXT_PUBLIC_API_BASE_URL;
-            const response = await API.get(base_url + "/user/me");
-            console.log("status code:", response.status);
-            setUser(response.data); // Set the user based on the backend's response
-            // console.log("User session verified:", response.data);
-          } catch (error) {
-            console.error("Session verification failed:", error);
-            // If the /me call fails, the token is invalid. Log the user out.
-            logout();
-          } finally {
-            setIsLoading(false);
-          }
+        try {
+          const base_url = process.env.NEXT_PUBLIC_API_BASE_URL;
+          const response = await API.get(base_url + "/User/me");
+          setUser(response.data);
+        } catch (error) {
+          console.error("Session verification failed:", error);
+          logout();
+        } finally {
+          setIsLoading(false);
         }
       } else {
-        setIsLoading(false); // No token found, not logged in.
+        setIsLoading(false);
       }
     };
-
     verifyUserSession();
-  }, []);
+  }, [logout]);
 
-  // Function to handle logging in
-  const login = (token: string, userData: User) => {
+  const login = useCallback((token: string, userData: User) => {
     localStorage.setItem("authToken", token);
     setUser(userData);
-  };
+    router.push('/dashboard');
+  }, [router]);
 
-  // Function to handle logging out
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    setUser(null);
-    router.push("/login");
-  };
-
-  // A derived boolean to easily check if a user is logged in
   const isAuthenticated = !!user;
 
   return (
@@ -104,7 +69,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// A custom hook to easily access the auth context in any component
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

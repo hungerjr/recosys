@@ -8,7 +8,7 @@ import { ArrowRight, UserPlus, Eye, EyeOff } from 'lucide-react'
 import { ThemeToggle } from '@/app/components/ui/theme-toggle'
 import { ModernInput } from '@/app/components/ui/modern-input'
 import { ModernButton } from '@/app/components/ui/modern-button'
-// import API from '@/lib/axios';
+import API from '@/lib/axios';
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -90,7 +90,8 @@ export default function RegisterPage() {
     } else {
       // --- REAL API LOGIC ---
       try {
-        // const response = await API.post('/auth/register', formData);
+        const base_url = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const response = await API.post(`${base_url}/User/register`, formData);
         toast.success('Account Created!', { description: 'You will now be redirected to the login page.' });
         setTimeout(() => router.push('/login'), 1000);
       } catch (error: any) {
