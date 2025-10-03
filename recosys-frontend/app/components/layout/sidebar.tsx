@@ -2,17 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Package, ShoppingCart, Users, Settings, X } from 'lucide-react'
-
-// Define the props the component will accept
-interface SidebarProps {
-  isMobileMenuOpen: boolean;
-  setIsMobileMenuOpen: (isOpen: boolean) => void;
-}
+import { Package, ShoppingCart, Users, Settings } from 'lucide-react'
 
 function NavLink({ href, icon: Icon, title }: { href: string; icon: React.ElementType; title: string; }) {
   const pathname = usePathname();
   const isActive = pathname.startsWith(href);
+
   return (
     <Link
       href={href}
@@ -28,20 +23,18 @@ function NavLink({ href, icon: Icon, title }: { href: string; icon: React.Elemen
   );
 }
 
-export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: SidebarProps) {
+export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: { isMobileMenuOpen: boolean, setIsMobileMenuOpen: (isOpen: boolean) => void }) {
   return (
     <>
-      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
           onClick={() => setIsMobileMenuOpen(false)}
           className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm md:hidden" 
         />
       )}
-
-      {/* Sidebar for both mobile (drawer) and desktop (fixed) */}
+      {/* The border-r class has been removed for a cleaner look */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-40 flex w-16 flex-col border-r bg-white transition-transform duration-300 ease-in-out dark:bg-slate-950 dark:border-slate-800 
+        className={`fixed inset-y-0 left-0 z-40 flex w-16 flex-col bg-white transition-transform duration-300 ease-in-out dark:bg-slate-950
         md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <nav className="flex flex-col items-center gap-4 px-2 py-4">

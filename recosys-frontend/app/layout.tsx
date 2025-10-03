@@ -32,18 +32,14 @@ export default function RootLayout({
             {children}
             <Toaster
               position="top-right"
+              richColors // 1. Add this prop to enable automatic styling
               toastOptions={{
+                // 2. We only style the main card to match our theme.
+                //    `richColors` will handle the success/error colors.
                 classNames: {
                   toast:
-                    "border border-black/10 bg-light-card text-light-foreground dark:border-white/10 dark:bg-dark-card dark:text-dark-foreground",
-                  title: "font-semibold",
-                  description:
-                    "text-light-muted-foreground dark:text-dark-muted-foreground",
-                  // Styling for each toast type to match your reference
-                  success: "border-l-4 border-green-500",
-                  error: "border-l-4 border-red-500",
-                  warning: "border-l-4 border-yellow-500",
-                  info: "border-l-4 border-blue-500",
+                    "border border-black/10 bg-light-card text-light-foreground dark:border-slate-800 dark:bg-dark-card dark:text-dark-foreground",
+                  closeButton: "border-l border-black/10 dark:border-white/10",
                 },
               }}
             />

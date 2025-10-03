@@ -1,77 +1,101 @@
-// Define the structure for a Customer
-export type Customer = {
-  id: string;
-  fname: string;
-  lname: string;
-  mobile: string;
-  email: string;
-  channel: string;
-  created_at: string;
+// This defines the structure for a single Address object from your backend
+export type Address = {
+  id: number;
   address: string;
-  pincode: string;
   city: string;
   state: string;
+  pincode: string;
+  country: string;
+  isDefault: boolean;
 };
 
-// Define the structure for an Order, with the missing fields re-added
+// This is the definitive Customer type, matching your API
+export type Customer = {
+  id: number;
+  fullName: string;
+  defaultAddress: Address | null;
+  phone: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// This is the Order type, updated for consistency
 export type Order = {
   id: string;
-  customerId: string;
+  customerId: number; // Use number to match Customer.id
   orderDate: string;
   shippedDate: string | null;
   status: 'New' | 'Ready to Ship' | 'Shipped' | 'Delivered' | 'Pending';
-  amount: number;   // <-- Re-added this field
-  payment: 'Prepaid' | 'COD'; // <-- Re-added this field
+  amount: number;
+  payment: 'Prepaid' | 'COD';
 };
 
-// Sample Customer Data
+// Sample Customer Data that matches the new structure
 export const customers: Customer[] = [
   {
-    id: 'cust_001',
-    fname: 'Nitesh',
-    lname: 'jairam',
-    mobile: 'xxxx-xxxxxx',
-    email: '5xj0ivkkegth0zz@marketplace.amazon.in',
-    channel: 'Amazon',
-    created_at: '28 Oct 2019',
-    address: 'No 31, 9th Cross, 1st Main, Amba Bhavani layout, Yeshanka Doddabettahalli',
-    pincode: '560097',
-    city: 'Bengaluru',
-    state: 'Karnataka',
+    id: 1,
+    fullName: "Nitesh Kumar",
+    defaultAddress: {
+      id: 1,
+      address: "No 31, 9th Cross, 1st Main",
+      city: "Bengaluru",
+      state: "Karnataka",
+      pincode: "560097",
+      country: "India",
+      isDefault: true,
+    },
+    phone: "9876543210",
+    email: "nitesh@example.com",
+    createdAt: "2023-10-28T10:00:00Z",
+    updatedAt: "2023-10-28T10:00:00Z"
   },
   {
-    id: 'cust_002',
-    fname: 'Rajendra',
-    lname: 'Prasad',
-    mobile: 'xxxx-xxxxxx',
-    email: 'zftcst3b6h0716p@marketplace.amazon.in',
-    channel: 'Amazon',
-    created_at: '25 Jul 2025',
-    address: 'Soni Home, Anand Colony, Parvati Path, New Chitragupta Nagar',
-    pincode: '800020',
-    city: 'Patna',
-    state: 'Bihar',
+    id: 2,
+    fullName: "Rajendra Prasad",
+    defaultAddress: {
+      id: 2,
+      address: "Soni Home, Anand Colony, Parvati Path",
+      city: "Patna",
+      state: "Bihar",
+      pincode: "800020",
+      country: "India",
+      isDefault: true,
+    },
+    phone: "9876543211",
+    email: "rajendra@example.com",
+    createdAt: "2024-07-25T11:00:00Z",
+    updatedAt: "2024-07-25T11:00:00Z"
   },
 ];
 
-// Sample Order Data, now with amount and payment details
+// Sample Order Data
 export const orders: Order[] = [
     {
         id: '404-8312720-4888338',
-        customerId: 'cust_001',
-        orderDate: '28 Oct 2019',
-        shippedDate: null,
-        status: 'Pending',
-        amount: 1250.00, // <-- Added value
-        payment: 'COD',    // <-- Added value
+        customerId: 1,
+        orderDate: '28 Oct 2023',
+        shippedDate: '29 Oct 2023',
+        status: 'Delivered',
+        amount: 1250.00,
+        payment: 'COD',
     },
     {
         id: '406-3472330-6603557',
-        customerId: 'cust_002',
+        customerId: 2,
         orderDate: '25 Jul 2025',
         shippedDate: '25 Jul 2025',
         status: 'Shipped',
-        amount: 1493.00, // <-- Added value
-        payment: 'Prepaid',// <-- Added value
+        amount: 1493.00,
+        payment: 'Prepaid',
+    },
+     {
+        id: '409-1234567-7890123',
+        customerId: 1,
+        orderDate: '15 Jan 2024',
+        shippedDate: null,
+        status: 'Pending',
+        amount: 899.00,
+        payment: 'Prepaid',
     },
 ];

@@ -20,6 +20,8 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -69,32 +71,43 @@ export default function LoginPage() {
       try {
         // 1. Call your backend's login endpoint to get the token
         const base_url = process.env.NEXT_PUBLIC_API_BASE_URL;
-        const loginResponse = await API.post(base_url + "/User/login", formData);
+
+        const loginResponse = await API.post(
+          base_url + "/User/login",
+          formData
+        );
         const { token } = loginResponse.data;
 
         if (!token) {
           throw new Error("Token not received from backend");
         }
-        
+
         // 2. Temporarily set the token in localStorage so our axios interceptor can use it
-        localStorage.setItem('authToken', token);
-        
+        localStorage.setItem("authToken", token);
+
         // 3. Call the /me endpoint to get the user's details
         //    NOTE: Ensure your backend has a GET endpoint like '/api/User/me'
-        const userResponse = await API.get(base_url + '/User/me');
+        const userResponse = await API.get(base_url + "/User/me");
         const user = userResponse.data;
 
         // 4. Now that we have the token AND user data, complete the login
-        toast.success('Login Successful!');
+        toast.success("Login Successful!");
         login(token, user);
-
+        router.push("/dashboard");
       } catch (err: any) {
         // Clear any token that might have been set
-        localStorage.removeItem('authToken');
-        toast.error(err.response?.data?.message || "Login failed. Please try again.");
+        if (err.response?.status === 401) {
+          toast.error("Invalid credentials.");
+        } else {
+          toast.error("Something went wrong.");
+        }
+        localStorage.removeItem("authToken");
+        // toast.error(
+        //   err.response?.data?.message || "Login failed. Please try again."
+        // );
+      } finally {
         setLoading(false);
       }
-
     }
   };
 
