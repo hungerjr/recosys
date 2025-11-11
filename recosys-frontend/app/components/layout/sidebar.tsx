@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Package, ShoppingCart, Users, Settings } from 'lucide-react'
+import { Package, ShoppingCart, Users, Settings, Upload } from 'lucide-react'
 
 function NavLink({ href, icon: Icon, title }: { href: string; icon: React.ElementType; title: string; }) {
   const pathname = usePathname();
@@ -46,7 +46,8 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: { isM
             <span className="sr-only">Recosys</span>
           </Link>
           <NavLink href="/dashboard/orders" icon={ShoppingCart} title="Orders" />
-          <NavLink href="/dashboard/customers" icon={Users} title="Customers" />
+          <NavLink href="/dashboard/customers" icon={Users} title="Customers" />          
+          <NavLink href="/dashboard/uploadimages" icon={Upload} title="Upload Order Images" />
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
           <NavLink href="/dashboard/settings" icon={Settings} title="Settings" />

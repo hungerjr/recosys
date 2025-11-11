@@ -208,6 +208,10 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
                                 .Select(g => g.First())
                                 .ToList();
 
+                var customersWithMaskedMobile = customerDtos
+                                                .Where(c => c.Mobile != null && c.Mobile.Contains('*'))
+                                                .ToList();
+
                 var uniquePhoneDtos = uniqueDtos
                                      .GroupBy(c=>c.Mobile)
                                      .Select(g => g.First())
@@ -224,20 +228,20 @@ namespace Recosys.Backend.Infrastructure.Repositories.Customer
                     var fullName = $"{dto.Fname?.Trim()} {dto.Lname?.Trim()}".Trim().ToLower();
                     var address = dto.Address?.Trim().ToLower();
                     var email = dto.Email?.Trim().ToLower();
-                    var phone = dto.Mobile?.Trim().ToLower();
                     var city = dto.City?.Trim().ToLower();
                     var state = dto.State?.Trim().ToLower();
                     var pincode = dto.Pincode?.Trim().ToLower();
+                    var phone = dto.Mobile?.Trim().ToLower();
 
                     bool exists = customersInDb.Any(c =>
-                        c.FullName.ToLower().Contains(fullName) &&
-                        c.Email.ToLower().Contains(email) &&
-                        c.Phone.ToLower().Contains(phone) &&
+                        c.FullName.Contains(fullName, StringComparison.CurrentCultureIgnoreCase) &&
+                        c.Email.Contains(email, StringComparison.CurrentCultureIgnoreCase) &&
+                        c.Phone.Contains(phone, StringComparison.CurrentCultureIgnoreCase) &&
                         c.Addresses.Any(a =>
-                            (a.Address?.ToLower().Contains(address) ?? false) &&
-                            (a.City?.ToLower().Contains(city) ?? false) &&
-                            (a.State?.ToLower().Contains(state) ?? false) &&
-                            (a.Pincode?.ToLower().Contains(pincode) ?? false)
+                            (a.Address?.ToLower().Contains(address, StringComparison.CurrentCultureIgnoreCase) ?? false) &&
+                            (a.City?.ToLower().Contains(city, StringComparison.CurrentCultureIgnoreCase) ?? false) &&
+                            (a.State?.ToLower(System.Globalization.CultureInfo.CurrentCulture).Contains(state, StringComparison.CurrentCultureIgnoreCase) ?? false) &&
+                            (a.Pincode?.ToLower(System.Globalization.CultureInfo.CurrentCulture).Contains(pincode, StringComparison.CurrentCultureIgnoreCase) ?? false)
                         ));
 
                     if (!exists)

@@ -260,6 +260,35 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.ToTable("Order");
                 });
 
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.Order.OrderImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CloudUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("FileName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderImages");
+                });
+
             modelBuilder.Entity("Recosys.Backend.Domain.Entities.Order.OrderProduct", b =>
                 {
                     b.Property<long>("ProductLineId")
@@ -446,6 +475,21 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Shipment");
+                });
+
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.Order.Status", b =>
+                {
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusDescription")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("StatusCode");
+
+                    b.ToTable("Status", (string)null);
                 });
 
             modelBuilder.Entity("Recosys.Backend.Domain.Entities.Products.ProductDetails", b =>
@@ -640,6 +684,17 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("Recosys.Backend.Domain.Entities.Order.OrderImage", b =>
+                {
+                    b.HasOne("Recosys.Backend.Domain.Entities.Order.OrderDetails", "Order")
+                        .WithMany("Images")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Recosys.Backend.Domain.Entities.Order.OrderProduct", b =>
                 {
                     b.HasOne("Recosys.Backend.Domain.Entities.Order.OrderDetails", "Order")
@@ -694,6 +749,8 @@ namespace Recosys.Backend.Infrastructure.Migrations
                     b.Navigation("AWBData");
 
                     b.Navigation("Activities");
+
+                    b.Navigation("Images");
 
                     b.Navigation("Products");
 

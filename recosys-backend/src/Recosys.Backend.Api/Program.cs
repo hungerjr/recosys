@@ -81,9 +81,10 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "https://localhost:3000",
+                "http://localhost:3000",
                 "https://localhost:5000",
                 "https://localhost:5001",
-                "https://8505e475aa2a.ngrok-free.app"
+                "https://fd3e3f91429e.ngrok-free.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -108,7 +109,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowNgrok");
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

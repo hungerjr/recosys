@@ -23,12 +23,13 @@ export type Customer = {
 // This is the Order type, updated for consistency
 export type Order = {
   id: string;
-  customerId: number; // Use number to match Customer.id
-  orderDate: string;
-  shippedDate: string | null;
-  status: 'New' | 'Ready to Ship' | 'Shipped' | 'Delivered' | 'Pending';
+  channelOrderId: string;
+  customerName: string;
+  customerPhone: string;
+  createdAt: string | null;
+  status: "New" | "Ready to Ship" | "Shipped" | "Delivered" | "Pending";
   amount: number;
-  payment: 'Prepaid' | 'COD';
+  payment: "Prepaid" | "COD";
 };
 
 // Sample Customer Data that matches the new structure
@@ -48,7 +49,7 @@ export const customers: Customer[] = [
     phone: "9876543210",
     email: "nitesh@example.com",
     createdAt: "2023-10-28T10:00:00Z",
-    updatedAt: "2023-10-28T10:00:00Z"
+    updatedAt: "2023-10-28T10:00:00Z",
   },
   {
     id: 2,
@@ -65,37 +66,37 @@ export const customers: Customer[] = [
     phone: "9876543211",
     email: "rajendra@example.com",
     createdAt: "2024-07-25T11:00:00Z",
-    updatedAt: "2024-07-25T11:00:00Z"
+    updatedAt: "2024-07-25T11:00:00Z",
   },
 ];
 
-// Sample Order Data
-export const orders: Order[] = [
-    {
-        id: '404-8312720-4888338',
-        customerId: 1,
-        orderDate: '28 Oct 2023',
-        shippedDate: '29 Oct 2023',
-        status: 'Delivered',
-        amount: 1250.00,
-        payment: 'COD',
-    },
-    {
-        id: '406-3472330-6603557',
-        customerId: 2,
-        orderDate: '25 Jul 2025',
-        shippedDate: '25 Jul 2025',
-        status: 'Shipped',
-        amount: 1493.00,
-        payment: 'Prepaid',
-    },
-     {
-        id: '409-1234567-7890123',
-        customerId: 1,
-        orderDate: '15 Jan 2024',
-        shippedDate: null,
-        status: 'Pending',
-        amount: 899.00,
-        payment: 'Prepaid',
-    },
-];
+// // Sample Order Data
+// export const orders: Order[] = [
+//     {
+//         id: '404-8312720-4888338',
+//         customerId: 1,
+//         orderDate: '28 Oct 2023',
+//         created_at: '29 Oct 2023',
+//         status: 'Delivered',
+//         amount: 1250.00,
+//         payment: 'COD',
+//     },
+//     {
+//         id: '406-3472330-6603557',
+//         customerId: 2,
+//         orderDate: '25 Jul 2025',
+//         created_at: '25 Jul 2025',
+//         status: 'Shipped',
+//         amount: 1493.00,
+//         payment: 'Prepaid',
+//     },
+//      {
+//         id: '409-1234567-7890123',
+//         customerId: 1,
+//         orderDate: '15 Jan 2024',
+//         created_at: null,
+//         status: 'Pending',
+//         amount: 899.00,
+//         payment: 'Prepaid',
+//     },
+// ];

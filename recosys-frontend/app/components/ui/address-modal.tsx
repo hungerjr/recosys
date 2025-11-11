@@ -26,8 +26,8 @@ export function AddressModal({ isOpen, onClose, customer }: AddressModalProps) {
           <span className="sr-only">Close</span>
         </button>
         
-        <h2 className="text-xl font-semibold">Addresses for {customer.fname} {customer.lname}</h2>
-        <div className="mt-4 space-y-4">
+        {/* <h2 className="text-xl font-semibold">Addresses for {customer.fname} {customer.lname}</h2> */}
+        {/* <div className="mt-4 space-y-4">
           {customer.addresses.map((address, index) => (
             <div key={index} className="rounded-md border bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
               <span className="inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">
@@ -38,7 +38,7 @@ export function AddressModal({ isOpen, onClose, customer }: AddressModalProps) {
               </p>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

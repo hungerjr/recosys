@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Recosys.Backend.Application.Common.Models;
+using Recosys.Backend.Application.DTOs.Order;
 using Recosys.Backend.Application.DTOs.Shiprocket;
 using Recosys.Backend.Application.Interfaces.Order;
 using Recosys.Backend.Domain.Entities.Customer;
@@ -6,6 +8,7 @@ using Recosys.Backend.Domain.Entities.Order;
 using Recosys.Backend.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +17,157 @@ namespace Recosys.Backend.Infrastructure.Repositories.Order
     public class OrderRepository(AppDbContext context) : IOrderRepository
     {
         private readonly AppDbContext _context = context;
+
+        public Task<int> CreateOrderAsync(OrderDetailsDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteOrderAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PagedResult<OrderDetailsDto>> GetPagedOrdersAsync(
+                             int pageNumber, int pageSize,
+                             string? sortBy, string? sortOrder,
+                             string? channelOrderId, string? AWB, string? statusDescription)
+        {
+            using var connection = _context.Database.GetDbConnection();
+            await connection.OpenAsync();
+
+            var skip = (pageNumber - 1) * pageSize;
+            var take = pageSize;
+
+            var sql = @"SELECT o.Id, o.ChannelOrderId, o.Total, o.PaymentMethod, o.StatusCode, o.CreatedAt,
+                            c.FullName AS CustomerName,  c.Phone AS CustomerPhone,
+                            p.ProductLineId, p.Name AS ProductName, p.ChannelSKU, p.Quantity,
+                            s.ShipmentId, s.Courier, s.AWB, s.Weight, s.Dimensions,
+                            st.StatusDescription
+
+                            FROM [Order] o
+                            LEFT JOIN CustomerDetails c ON o.CustomerId = c.Id
+                            LEFT JOIN OrderProduct p ON o.Id = p.OrderId
+                            LEFT JOIN Shipment s ON o.Id = s.OrderId
+                            LEFT JOIN Status st ON o.StatusCode = st.StatusCode
+
+                            WHERE
+                                (@channelOrderId IS NULL OR o.ChannelOrderId LIKE '%' + @channelOrderId + '%') AND
+                                (@AWB IS NULL OR s.AWB LIKE '%' + @AWB + '%') AND
+                                (@statusDescription IS NULL OR st.StatusDescription LIKE '%' + @statusDescription + '%')";
+
+            string orderByClause = sortBy?.ToLower() switch
+            {
+                "createdat" => $"ORDER BY o.CreatedAt {(sortOrder?.ToLower() == "asc" ? "ASC" : "DESC")}",
+                "status" => $"ORDER BY st.StatusDescription {(sortOrder?.ToLower() == "asc" ? "ASC" : "DESC")}",
+                _ => $"ORDER BY o.Id {(sortOrder?.ToLower() == "asc" ? "ASC" : "DESC")}"
+            };
+
+            sql += $@" {orderByClause}
+                    OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY;
+
+                    SELECT COUNT(*)
+                    FROM [Order] o
+                    LEFT JOIN Shipment s ON o.Id = s.OrderId
+                    LEFT JOIN Status st ON o.StatusCode = st.StatusCode
+                    WHERE
+                        (@channelOrderId IS NULL OR o.ChannelOrderId LIKE '%' + @channelOrderId + '%') AND
+                        (@AWB IS NULL OR s.AWB LIKE '%' + @AWB + '%') AND
+                        (@statusDescription IS NULL OR st.StatusDescription LIKE '%' + @statusDescription + '%');
+                    ";
+
+
+            using var command = connection.CreateCommand();
+            command.CommandText = sql;
+
+            var parameters = new[]
+            {
+                CreateParam(command, "@channelOrderId", channelOrderId),
+                CreateParam(command, "@AWB", AWB),
+                CreateParam(command, "@statusDescription", statusDescription),
+                CreateParam(command, "@sortBy", sortBy ?? "id"),
+                CreateParam(command, "@sortOrder", sortOrder ?? "desc"),
+                CreateParam(command, "@skip", skip),
+                CreateParam(command, "@take", take)
+            };
+            foreach (var p in parameters) command.Parameters.Add(p);
+
+            var orders = new List<OrderDetailsDto>();
+            int totalCount = 0;
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                var orderId = reader.GetInt32(0);
+                var existingOrder = orders.FirstOrDefault(o => o.Id == orderId);
+
+                if (existingOrder == null)
+                {
+                    existingOrder = new OrderDetailsDto
+                    {
+                        Id = orderId,
+                        ChannelOrderId = reader.IsDBNull(1) ? null : reader.GetString(1),
+                        Total = reader.GetDecimal(2),
+                        PaymentMethod = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        StatusCode = reader.GetInt32(4),
+                        StatusMessage = reader.IsDBNull(17) ? null : reader.GetString(17),
+                        CreatedAt = reader.GetDateTime(5),
+                        CustomerName = reader.IsDBNull(6) ? null : reader.GetString(6),
+                        CustomerPhone = reader.IsDBNull(7) ? null : reader.GetString(7),
+                        Products = new List<OrderProductDto>(),
+                        Shipments = new List<ShipmentDto>()
+                    };
+                    orders.Add(existingOrder);
+                }
+
+                if (!reader.IsDBNull(8))
+                {
+                    var productLineId = reader.GetInt64(8);
+                    if (!existingOrder.Products.Any(p => p.ProductLineId == productLineId))
+                    {
+                        existingOrder.Products.Add(new OrderProductDto
+                        {
+                            ProductLineId = productLineId,
+                            Name = reader.IsDBNull(9) ? null : reader.GetString(9),
+                            ChannelSku = reader.IsDBNull(10) ? null : reader.GetString(10),
+                            Quantity = reader.GetInt32(11)
+                        });
+                    }
+                }
+
+                if (!reader.IsDBNull(12))
+                {
+                    var shipmentId = reader.GetInt64(12);
+                    if (!existingOrder.Shipments.Any(s => s.ShipmentId == shipmentId))
+                    {
+                        existingOrder.Shipments.Add(new ShipmentDto
+                        {
+                            ShipmentId = shipmentId,
+                            Courier = reader.IsDBNull(13) ? null : reader.GetString(13),
+                            Awb = reader.IsDBNull(14) ? null : reader.GetString(14),
+                            Weight = reader.IsDBNull(15) ? 0 : reader.GetDecimal(15),
+                            Dimensions = reader.IsDBNull(16) ? null : reader.GetString(16)
+                        });
+                    }
+                }
+            }
+
+            if (await reader.NextResultAsync() && await reader.ReadAsync())
+                totalCount = reader.GetInt32(0);
+
+            return new PagedResult<OrderDetailsDto>(orders, totalCount, pageNumber, pageSize);
+        }
+
+        public Task<OrderDetailsDto> GetOrderByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateOrderAsync(int id, OrderDetailsDto dto)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<int> BulkInsertOrdersAsync(List<ShiprocketOrderDto> orderDtos)
         {
@@ -70,6 +224,22 @@ namespace Recosys.Backend.Infrastructure.Repositories.Order
                         customerId = newCustomer.Id;
                     }
 
+                    var statusCode = await _context.Status
+                        .Where(s => s.StatusCode == dto.StatusCode)
+                        .Select(s => s.StatusCode)
+                        .FirstOrDefaultAsync();
+
+                    if (statusCode == 0)
+                    {
+                        var newStatus = new Status
+                        {
+                            StatusCode = dto.StatusCode,
+                            StatusDescription = dto.Status,
+                        };
+                        _context.Status.Add(newStatus);
+                        await _context.SaveChangesAsync();
+                    }
+
                     var order = new OrderDetails
                     {
                         ShiprocketId = dto.ShiprocketId,
@@ -95,7 +265,7 @@ namespace Recosys.Backend.Infrastructure.Repositories.Order
                         UpdatedAt = dto.UpdatedAt,
 
                         Products = dto.Products?.Select(p => new OrderProduct
-                        {   
+                        {
                             ProductLineId = p.Id,
                             ChannelOrderProductId = p.ChannelOrderProductId,
                             Name = p.Name,
@@ -164,6 +334,58 @@ namespace Recosys.Backend.Infrastructure.Repositories.Order
                 await transaction.RollbackAsync();
                 throw;
             }
+        }
+
+        public async Task<(bool exists, AwbCheckDto? order)> CheckAwbDetailsAsync(string awb)
+        {
+            if (string.IsNullOrWhiteSpace(awb))
+                return (false, null);
+
+            using var connection = _context.Database.GetDbConnection();
+            await connection.OpenAsync();
+
+            var sql = @"
+                        SELECT TOP 1 
+                            p.Name AS ProductName,
+                            s.AWB,
+                            s.Courier,
+                            p.Quantity,
+                            o.CreatedAt
+                        FROM Shipment s
+                        INNER JOIN [Order] o ON s.OrderId = o.Id
+                        INNER JOIN OrderProduct p ON o.Id = p.OrderId
+                        WHERE s.AWB = @awb;
+                    ";
+
+            using var command = connection.CreateCommand();
+            command.CommandText = sql;
+            command.Parameters.Add(CreateParam(command, "@awb", awb));
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                var dto = new AwbCheckDto
+                {
+                    ProductName = reader.IsDBNull(0) ? null : reader.GetString(0),
+                    AWB = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    Courier = reader.IsDBNull(2) ? null : reader.GetString(2),
+                    Quantity = reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
+                    CreatedAt = reader.GetDateTime(4)
+                };
+
+                return (true, dto);
+            }
+
+            return (false, null);
+        }
+
+        private static DbParameter CreateParam(DbCommand command, string name, object? value)
+        {
+            var param = command.CreateParameter();
+            param.ParameterName = name;
+            param.Value = value ?? DBNull.Value;
+            return param;
         }
     }
 }

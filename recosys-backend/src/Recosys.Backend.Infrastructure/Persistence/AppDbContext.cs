@@ -25,8 +25,8 @@ namespace Recosys.Backend.Infrastructure.Persistence
         public DbSet<OrderActivity> OrderActivity { get; set; }
         public DbSet<OrderProduct> OrderProduct { get; set; }
         public DbSet<Shipment> Shipment { get; set; }
-
-
+        public DbSet<Status> Status { get; set; }
+        public DbSet<OrderImage> OrderImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -76,6 +76,26 @@ namespace Recosys.Backend.Infrastructure.Persistence
             .WithOne(a => a.Customer)
             .HasForeignKey(a => a.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Status>(entity =>
+            {
+                entity.ToTable("Status");
+                entity.HasKey(e => e.StatusCode);
+                entity.Property(e => e.StatusDescription)
+                      .HasMaxLength(50)
+                      .IsRequired();
+            });
+            modelBuilder.Entity<OrderImage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.FileName).HasMaxLength(200);
+                entity.Property(e => e.CloudUrl).HasMaxLength(1000);
+
+                entity.HasOne(e => e.Order)
+                      .WithMany(o => o.Images)
+                      .HasForeignKey(e => e.OrderId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

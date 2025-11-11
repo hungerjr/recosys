@@ -22,25 +22,43 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
-   const showSearchBar = pathname.startsWith('/dashboard/orders') || pathname.startsWith('/dashboard/customers');
+  const showSearchBar =
+    pathname.startsWith("/dashboard/orders") ||
+    pathname.startsWith("/dashboard/customers");
 
-  const searchOptions: SearchOption[] = pathname.startsWith("/dashboard/customers")
-    ? [ { value: "name", label: "Name" }, { value: "phone", label: "Phone" }, { value: "email", label: "Email" } ]
-    : [ { value: "orderId", label: "Order ID" }, { value: "awb", label: "AWB" } ];
+  const searchOptions: SearchOption[] = pathname.startsWith(
+    "/dashboard/customers"
+  )
+    ? [
+        { value: "name", label: "Name" },
+        { value: "phone", label: "Phone" },
+        { value: "email", label: "Email" },
+      ]
+    : [
+        { value: "orderId", label: "Order ID" },
+        { value: "awb", label: "AWB" },
+        { value: "statusDescription", label: "Status" },
+      ];
 
   useEffect(() => {
     // Reset search when the page changes to avoid irrelevant filters
     setSearchBy(searchOptions[0]);
     setSearchQuery("");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsProfileOpen(false);
       }
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setIsSearchOpen(false);
       }
     }
@@ -52,34 +70,51 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
   // This function now correctly returns a string
   const getPageTitle = (): string => {
-    if (pathname === '/dashboard') return 'Overview';
-    if (pathname.startsWith('/dashboard/orders')) return 'Orders';
-    if (pathname.startsWith('/dashboard/customers')) return 'Customers';
-    if (pathname.startsWith('/dashboard/settings')) return 'Settings';
-    
-    const title = pathname.split('/').pop()?.replace('-', ' ');
-    return title ? title.charAt(0).toUpperCase() + title.slice(1) : 'Dashboard';
+    if (pathname === "/dashboard") return "Overview";
+    if (pathname.startsWith("/dashboard/orders")) return "Orders";
+    if (pathname.startsWith("/dashboard/customers")) return "Customers";
+    if (pathname.startsWith("/dashboard/uploadimages"))
+      return "Upload Order Images";
+    if (pathname.startsWith("/dashboard/settings")) return "Settings";
+
+    const title = pathname.split("/").pop()?.replace("-", " ");
+    return title ? title.charAt(0).toUpperCase() + title.slice(1) : "Dashboard";
   };
 
   return (
     // The border color is now more subtle
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-200 bg-white px-4 sm:px-6 dark:bg-slate-950 dark:border-slate-800">
-      <button onClick={onMenuClick} className="md:hidden"> <PanelLeft className="h-6 w-6" /> </button>
-      <h1 className="hidden text-xl font-semibold md:block">{getPageTitle()}</h1>
-      
+      <button onClick={onMenuClick} className="md:hidden">
+        {" "}
+        <PanelLeft className="h-6 w-6" />{" "}
+      </button>
+      <h1 className="hidden text-xl font-semibold md:block">
+        {getPageTitle()}
+      </h1>
+
       <div className="ml-auto flex items-center gap-2 sm:gap-4">
         {showSearchBar && (
           <div className="relative" ref={searchRef}>
             <div className="group flex h-10 items-center rounded-lg border bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-500 dark:border-slate-800 dark:bg-slate-900">
               <div className="relative h-full">
-                <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="flex h-full items-center gap-1 rounded-l-md border-r px-3 text-sm text-slate-600 transition-colors group-hover:bg-slate-100 dark:border-slate-700 dark:text-slate-400 dark:group-hover:bg-slate-800">
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="flex h-full items-center gap-1 rounded-l-md border-r px-3 text-sm text-slate-600 transition-colors group-hover:bg-slate-100 dark:border-slate-700 dark:text-slate-400 dark:group-hover:bg-slate-800"
+                >
                   {searchBy.label}
                   <ChevronDown className="h-4 w-4" />
                 </button>
                 {isSearchOpen && (
                   <div className="absolute top-11 left-0 z-10 w-40 rounded-md border bg-white py-1 shadow-lg dark:border-slate-800 dark:bg-slate-900">
                     {searchOptions.map((option) => (
-                      <button key={option.value} onClick={() => { setSearchBy(option); setIsSearchOpen(false); }} className="block w-full px-3 py-1.5 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-800">
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSearchBy(option);
+                          setIsSearchOpen(false);
+                        }}
+                        className="block w-full px-3 py-1.5 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
+                      >
                         {option.label}
                       </button>
                     ))}
@@ -110,10 +145,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </button>
           <div
             className={`absolute right-0 mt-2 w-56 origin-top-right rounded-md border bg-white p-1 shadow-lg transition-all duration-200 ease-out dark:border-slate-800 dark:bg-slate-900 ${
-                isProfileOpen
-                  ? "scale-100 opacity-100"
-                  : "scale-95 opacity-0 pointer-events-none"
-              }`}
+              isProfileOpen
+                ? "scale-100 opacity-100"
+                : "scale-95 opacity-0 pointer-events-none"
+            }`}
           >
             <div className="px-3 py-2">
               <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">

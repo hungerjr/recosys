@@ -117,7 +117,7 @@ namespace Recosys.Backend.Application.Services
                 password
             };
 
-            var response = await httpClient.PostAsJsonAsync("https://apiv2.shiprocket.in/v1/external/auth/login", loginPayload);
+            var response = await httpClient.PostAsJsonAsync("https://apiv2.shiprocket.co/v1/auth/login", loginPayload);
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception("Shiprocket login failed");
@@ -143,16 +143,11 @@ namespace Recosys.Backend.Application.Services
             {
                 foreach (var customer in customers)
                 {
-                    if (string.IsNullOrEmpty(customer.Mobile))
-                    {
-                        customer.Mobile = await GetCustomerMobileFromShiprocket(customer.Id);
-                    }
+                    customer.Mobile = await GetCustomerMobileFromShiprocket(customer.Id);
                 }
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            catch (Exception)
+            { }
         }
 
         private async Task<string> GetCustomerMobileFromShiprocket(string customerId)

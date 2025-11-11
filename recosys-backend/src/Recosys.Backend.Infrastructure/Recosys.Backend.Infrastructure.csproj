@@ -8,6 +8,7 @@
     <ProjectReference Include="..\Recosys.Backend.Shared\Recosys.Backend.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.17.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="EFCore.BulkExtensions" Version="9.0.1" />
     <PackageReference Include="MailKit" Version="4.13.0" />
@@ -20,6 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Graph" Version="5.94.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />

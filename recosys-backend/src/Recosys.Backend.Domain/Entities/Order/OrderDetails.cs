@@ -67,5 +67,6 @@ namespace Recosys.Backend.Domain.Entities.Order
         public ICollection<Shipment> Shipments { get; set; }
         public ICollection<OrderActivity> Activities { get; set; }
         public AWBData AWBData { get; set; }
+        public ICollection<OrderImage> Images { get; set; }
     }
 }
